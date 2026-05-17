@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght=400;700&family=Plus+Jakarta+Sans:wght=300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght=300;400;600;700&display=swap');
         :root { --primary: #3b82f6; --bg-dark: #020617; --glass: rgba(30, 41, 59, 0.7); }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-dark); color: #f1f5f9; overflow: hidden; height: 100vh; }
         .gaming-font { font-family: 'Orbitron', sans-serif; }
@@ -33,14 +33,15 @@
 </head>
 <body class="flex p-4 gap-4">
 
-    <!-- PAGE LOGIN -->
+    <img id="pdf-logo-buffer" src="logo_kelab.png" class="hidden" onerror="this.src='sdce.png'">
+
     <div id="login-page" class="fixed inset-0 bg-slate-950 z-[99999] flex items-center justify-center p-4">
         <div class="glass-card p-8 w-full max-w-md border-blue-500/30 shadow-2xl text-center">
             <div class="flex justify-center items-center mb-6">
-                <img src="sdce.png" class="w-40 h-40 object-contain drop-shadow-[0_0_20px_rgba(59,130,246,0.6)]" alt="Logo SDCE">
+                <img src="logo_kelab.png" class="w-56 h-56 object-contain drop-shadow-[0_0_25px_rgba(59,130,246,0.6)]" onerror="this.src='sdce.png'" alt="Logo SDCE">
             </div>
-            <h2 class="gaming-font text-sm text-blue-500 tracking-widest uppercase mb-1">SDCE MASTER HUB V19</h2>
-            <p class="text-[10px] text-slate-500 uppercase tracking-wider mb-8">Sila Pilih Peranan Log Masuk Anda</p>
+            <h2 class="gaming-font text-xs text-blue-500 tracking-widest uppercase mb-1">SDCE MASTER HUB V19</h2>
+            <p class="text-[9px] text-slate-400 uppercase tracking-wider mb-8">KMS KELAB SUKAN ELEKTRONIK MDS</p>
             
             <div class="space-y-3">
                 <button onclick="selectRole('guest')" class="w-full bg-slate-800 hover:bg-slate-700 py-3 rounded-xl font-bold text-xs flex justify-between items-center px-6 transition-all">
@@ -57,13 +58,11 @@
                 </button>
             </div>
 
-            <!-- Input Kata Laluan User -->
             <div id="user-pass-box" class="hidden mt-6 pt-6 border-t border-white/5">
                 <input type="password" id="login-user-pass" placeholder="MASUKKAN KATA LALUAN USER" class="w-full text-center mb-3 uppercase font-mono tracking-widest">
                 <button onclick="verifyUserLogin()" class="w-full bg-blue-600 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider">Sahkan Akses User</button>
             </div>
 
-            <!-- Input Kata Laluan Admin -->
             <div id="admin-pass-box" class="hidden mt-6 pt-6 border-t border-white/5">
                 <input type="password" id="login-admin-pass" placeholder="MASUKKAN KATA LALUAN ADMIN" class="w-full text-center mb-3 uppercase font-mono tracking-widest">
                 <button onclick="verifyAdminLogin()" class="w-full bg-purple-600 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider">Sahkan Akses Admin</button>
@@ -71,7 +70,6 @@
         </div>
     </div>
 
-    <!-- Modal Khas Kelulusan Tindakan Admin Dalam Hub -->
     <div id="auth-modal" class="modal">
         <div class="glass-card p-8 w-80 text-center border-blue-500">
             <i class="fas fa-fingerprint text-4xl text-blue-500 mb-4"></i>
@@ -84,7 +82,6 @@
         </div>
     </div>
 
-    <!-- Sidebar -->
     <aside class="w-64 glass-card p-6 flex flex-col shrink-0">
         <div class="text-center mb-4">
             <div class="flex justify-center gap-2 items-center mb-3">
@@ -94,7 +91,6 @@
             <h1 class="gaming-font text-[10px] text-blue-500 tracking-widest uppercase">SDCE Master <span class="text-white">Hub</span></h1>
         </div>
 
-        <!-- Info Peranan Pengguna Semasa -->
         <div class="bg-slate-900/80 p-3 rounded-xl border border-white/5 text-center mb-4">
             <p class="text-[8px] text-slate-500 font-bold uppercase tracking-widest">Sesi Semasa</p>
             <p id="current-role-badge" class="text-[10px] font-black uppercase mt-0.5 tracking-wider text-white">Guest</p>
@@ -105,13 +101,15 @@
             <button onclick="showSection('list')" id="btn-list" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold role-user-only role-admin-only"><i class="fas fa-users"></i> Ahli Rasmi</button>
             <button onclick="showSection('reg')" id="btn-reg" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold role-user-only"><i class="fas fa-id-card"></i> Pendaftaran</button>
             <button onclick="showSection('arena')" id="btn-arena" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold role-guest-accessible role-user-only"><i class="fas fa-volleyball-ball"></i> Arena</button>
-            <button onclick="showSection('arena-status')" id="btn-arena-status" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold role-admin-accessible"><i class="fas fa-clock"></i> Status Sri Nancy</button>
+            <button onclick="showSection('arena-status')" id="btn-arena-status" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold role-guest-accessible"><i class="fas fa-clock"></i> Status Sri Nancy</button>
             <button onclick="showSection('activities')" id="btn-activities" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold role-user-only"><i class="fas fa-calendar-alt text-yellow-500"></i> Program Kelab</button>
             <button onclick="showSection('approval')" id="btn-approval" class="nav-btn flex items-center justify-between px-4 py-2.5 text-xs font-bold role-admin-only">
                 <span><i class="fas fa-check-circle mr-3"></i> Kelulusan</span>
                 <span id="badge-count" class="bg-red-500 text-[10px] px-2 rounded-full text-white">0</span>
             </button>
+            <button onclick="showSection('receipt-generator-section')" id="btn-receipt-generator-section" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-sky-400 role-user-only"><i class="fas fa-receipt"></i> Receipt Generator</button>
             <button onclick="showSection('reports')" id="btn-reports" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-emerald-400 role-user-only"><i class="fas fa-file-pdf"></i> Jana Laporan</button>
+            <button onclick="showSection('audit-log-section')" id="btn-audit-log-section" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-red-400 role-user-only"><i class="fas fa-history"></i> Audit Log</button>
         </nav>
 
         <div class="pt-4 border-t border-white/5 mt-2">
@@ -119,7 +117,6 @@
         </div>
     </aside>
 
-    <!-- Main Content -->
     <main class="flex-1 flex flex-col gap-4 overflow-hidden">
         <header class="glass-card px-8 py-5 flex justify-between items-center">
             <div class="flex items-center gap-4">
@@ -131,34 +128,31 @@
 
         <div class="flex-1 overflow-y-auto pr-2">
             
-            <!-- Dashboard Section -->
             <section id="dashboard" class="section-content active space-y-6">
-                <!-- LOGO BESAR DASHBOARD -->
                 <div class="glass-card p-6 flex flex-col items-center justify-center bg-gradient-to-r from-slate-900/40 via-blue-950/20 to-slate-900/40 border border-blue-500/20 shadow-[0_0_30px_rgba(59,130,246,0.1)]">
-                    <img src="sdce.png" class="w-36 h-36 object-contain drop-shadow-[0_0_25px_rgba(59,130,246,0.5)] mb-3" alt="SDCE Big Logo">
-                    <h2 class="gaming-font text-lg font-bold text-white tracking-widest">SDCE MASTER HUB</h2>
-                    <p class="text-[10px] text-blue-400 font-semibold tracking-wider uppercase mt-1">Sistem Pengurusan Sukan Elektronik & Arena Bersepadu</p>
+                    <img src="logo_kelab.png" class="w-52 h-52 object-contain drop-shadow-[0_0_25px_rgba(59,130,246,0.5)] mb-3" onerror="this.src='sdce.png'" alt="SDCE Big Logo">
+                    <h2 class="gaming-font text-base font-bold text-white tracking-widest">SDCE MASTER HUB</h2>
+                    <p class="text-[10px] text-blue-400 font-semibold tracking-wider uppercase mt-1 text-center">Kelab Sukan Elektronik Majlis Daerah Simunjan</p>
                 </div>
 
                 <div class="grid grid-cols-4 gap-4">
                     <div class="glass-card p-5 border-l-4 border-blue-500"><p class="text-[9px] text-slate-500 font-bold uppercase">Total Ahli</p><h3 id="stat-total" class="gaming-font text-2xl">0</h3></div>
                     <div class="glass-card p-5 border-l-4 border-emerald-500"><p class="text-[9px] text-slate-500 font-bold uppercase">Total Dana</p><h3 id="stat-rev" class="gaming-font text-2xl text-emerald-400">RM 0</h3></div>
                     <div class="glass-card p-5 border-l-4 border-orange-500"><p class="text-[9px] text-slate-500 font-bold uppercase">Dana Arena</p><h3 id="stat-arena" class="gaming-font text-2xl text-orange-400">RM 0</h3></div>
-                    <div class="glass-card p-5 border-l-4 border-purple-500"><p class="text-[9px] text-slate-500 font-bold uppercase">Yuran Pendaftaran</p><h3 id="stat-reg" class="gaming-font text-2xl text-purple-400">RM 0</h3></div>
+                    <div class="glass-card p-5 border-l-4 border-purple-500"><p class="text-[9px] text-slate-500 font-bold uppercase">Kutipan Keahlian</p><h3 id="stat-reg" class="gaming-font text-2xl text-purple-400">RM 0</h3></div>
                 </div>
 
-                <!-- Barisan AJK -->
                 <div class="glass-card p-6">
                     <h3 class="gaming-font text-base font-bold text-blue-400 uppercase mb-4 tracking-wider">Barisan Kepimpinan AJK Kelab</h3>
                     <div id="ajk-grid" class="grid grid-cols-4 gap-6"></div>
                 </div>
 
-                <!-- Grid untuk Log, Kenyataan & Carta Pai -->
-                <div class="grid grid-cols-3 gap-6 pb-10">
+                <div class="grid grid-cols-4 gap-4 pb-10">
                     <div class="glass-card h-[350px] flex flex-col">
                         <div class="p-4 border-b border-white/5 text-[10px] font-bold text-orange-400 uppercase">Log Aktiviti & Transaksi</div>
                         <div id="transaction-log" class="p-4 overflow-y-auto flex-1 space-y-2 font-mono text-[9px]"></div>
                     </div>
+                    
                     <div class="glass-card h-[350px] flex flex-col">
                         <div class="p-4 border-b border-white/5 flex justify-between items-center text-[10px] font-bold text-purple-400 uppercase">
                             <span>Kenyataan Rasmi</span>
@@ -166,16 +160,36 @@
                         </div>
                         <div id="news-list" class="p-4 overflow-y-auto flex-1 space-y-2"></div>
                     </div>
+
+                    <div class="glass-card h-[350px] flex flex-col relative overflow-hidden">
+                        <div class="p-4 border-b border-white/5 flex justify-between items-center text-[10px] font-bold text-blue-400 uppercase z-10">
+                            <span>Poster / Aktiviti Hub</span>
+                            <div class="flex gap-1">
+                                <label class="bg-blue-600 px-2 py-1 rounded text-[8px] cursor-pointer role-user-only role-admin-only">
+                                    MUAT NAIK
+                                    <input type="file" id="dashboard-poster-input" accept="image/*" class="hidden" onchange="uploadDashboardPoster(this)">
+                                </label>
+                                <button id="delete-poster-btn" onclick="openAuth(()=>deleteDashboardPoster())" class="bg-red-600 px-2 py-1 rounded text-[8px] font-bold hidden role-user-only role-admin-only">PADAM</button>
+                            </div>
+                        </div>
+                        <div class="flex-1 flex items-center justify-center p-3 bg-slate-950/40 relative overflow-hidden">
+                            <img id="dashboard-poster-img" class="w-full h-full object-contain rounded-lg hidden" alt="Poster Kelab">
+                            <div id="dashboard-poster-placeholder" class="text-center p-4">
+                                <i class="fas fa-images text-3xl text-slate-700 mb-2 block"></i>
+                                <span class="text-[9px] text-slate-500 uppercase tracking-wider block">Tiada Poster Dipaparkan</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="glass-card h-[350px] flex flex-col items-center justify-center p-4">
                         <div class="text-[10px] font-bold text-blue-400 uppercase mb-2 w-full text-left">Pecahan Kategori Ahli</div>
                         <div class="w-full h-full flex items-center justify-center relative">
-                            <canvas id="membershipChart" class="max-h-[240px] max-w-[240px]"></canvas>
+                            <canvas id="membershipChart" class="max-h-[220px] max-w-[220px]"></canvas>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Status Arena Sri Nancy -->
             <section id="arena-status" class="section-content">
                 <div class="glass-card p-6 min-h-[400px]">
                     <div class="flex justify-between items-center mb-4 flex-wrap gap-4">
@@ -187,8 +201,7 @@
                         </div>
                     </div>
 
-                    <!-- Bar Penapis Carian Khas Untuk User & Admin -->
-                    <div id="arena-search-bar" class="bg-slate-900/60 p-3 rounded-xl border border-white/5 flex gap-3 mb-6 role-user-only role-admin-only hidden">
+                    <div id="arena-search-bar" class="bg-slate-900/60 p-3 rounded-xl border border-white/5 flex gap-3 mb-6 role-guest-accessible">
                         <div class="flex-1">
                             <input type="text" id="search-arena-name" placeholder="Cari Nama Penempah / No Bil..." onkeyup="refresh()" class="w-full">
                         </div>
@@ -202,40 +215,125 @@
                 </div>
             </section>
 
-            <!-- Laporan PDF -->
+            <section id="receipt-generator-section" class="section-content">
+                <div class="glass-card p-10 max-w-2xl mx-auto border-t-4 border-sky-500 space-y-6">
+                    <h3 class="gaming-font text-sm text-sky-400 text-center uppercase tracking-widest"><i class="fas fa-receipt mr-2"></i> Custom Receipt Generator</h3>
+                    <p class="text-[10px] text-slate-400 text-center">Borang manual khas untuk menjana resit digital rasmi bagi transaksi pelbagai urusan kelab.</p>
+                    
+                    <form onsubmit="handleManualReceipt(event)" class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-[10px] text-slate-500 block mb-1">NAMA PEMBAYAR</label>
+                                <input type="text" id="rcpt-name" placeholder="NAMA PENUH" required class="w-full uppercase font-bold">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-500 block mb-1">JENIS BAYARAN (KOD DOKUMEN)</label>
+                                <select id="rcpt-type" required class="w-full" onchange="updateManualReceiptNo()">
+                                    <option value="PROG">YURAN PROGRAM / AKTIVITI</option>
+                                    <option value="JERSI">PEMBELIAN JERSI KELAB</option>
+                                    <option value="DONATION">SUMBANGAN / DANA LUAR</option>
+                                    <option value="MISC">PELBAGAI (MISCELLANEOUS)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-[10px] text-slate-500 block mb-1">TARIKH RESIT</label>
+                                <input type="date" id="rcpt-date" required class="w-full" onchange="updateManualReceiptNo()">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-500 block mb-1">NO RESIT (AUTO-GENERATED)</label>
+                                <input type="text" id="rcpt-bill" placeholder="PILIH TARIKH & JENIS" readonly class="w-full opacity-70 bg-slate-950 font-mono text-sky-400 font-bold">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-[10px] text-slate-500 block mb-1">JUMLAH AMAUN (RM)</label>
+                                <input type="number" id="rcpt-amount" placeholder="CONTOH: 150" required min="1" class="w-full font-bold">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-500 block mb-1">JUMLAH DALAM AYAT (MANUAL KEY-IN)</label>
+                                <input type="text" id="rcpt-words" placeholder="CONTOH: SERATUS LIMA PULUH" required class="w-full uppercase font-bold text-[11px]">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-[10px] text-slate-500 block mb-1">PARTICULAR RESIT (PERKARA / DESKRIPSI BAYARAN)</label>
+                            <textarea id="rcpt-particular" placeholder="Nyatakan keterangan terperinci tujuan bayaran ini dibuat..." required class="w-full h-20 text-xs uppercase"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full bg-sky-600 hover:bg-sky-500 text-white py-3 rounded-xl font-bold uppercase tracking-wider text-xs shadow-lg transition-all">
+                            <i class="fas fa-file-pdf mr-2"></i> Jana & Muat Turun Resit Formal
+                        </button>
+                    </form>
+                </div>
+            </section>
+
             <section id="reports" class="section-content">
                 <div class="glass-card p-10 max-w-xl mx-auto border-t-4 border-emerald-500 space-y-6">
-                    <h3 class="gaming-font text-sm text-emerald-500 text-center uppercase tracking-widest">Pusat Laporan & PDF</h3>
+                    <h3 class="gaming-font text-sm text-emerald-500 text-center uppercase tracking-widest">Pusat Laporan & PDF Pintar</h3>
                     <div class="space-y-4">
-                        <div>
-                            <label class="text-[10px] text-slate-500 block mb-2">PILIH TAHUN LAPORAN</label>
-                            <select id="report-year" class="w-full">
-                                <option value="2024">2024</option>
-                                <option value="2025">2025</option>
-                                <option value="2026" selected>2026</option>
-                            </select>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-[10px] text-slate-500 block mb-2">PILIH TAHUN LAPORAN</label>
+                                <select id="report-year" class="w-full">
+                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026" selected>2026</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-500 block mb-2">PILIH TARIKH KHAS (OPSYENAL)</label>
+                                <input type="date" id="report-date" class="w-full">
+                            </div>
                         </div>
-                        <div class="grid grid-cols-1 gap-2">
-                            <button onclick="pdfAhli()" class="w-full bg-slate-800 py-3 rounded-xl text-xs font-bold text-left px-5 hover:bg-emerald-600/20"><i class="fas fa-users mr-3 text-emerald-500"></i> Senarai Nama Ahli Rasmi</button>
-                            <button onclick="pdfKutipan()" class="w-full bg-slate-800 py-3 rounded-xl text-xs font-bold text-left px-5 hover:bg-emerald-600/20"><i class="fas fa-wallet mr-3 text-emerald-500"></i> Laporan Kutipan Dana & Yuran</button>
-                            <button onclick="pdfAJK()" class="w-full bg-slate-800 py-3 rounded-xl text-xs font-bold text-left px-5 hover:bg-emerald-600/20"><i class="fas fa-sitemap mr-3 text-emerald-500"></i> Senarai Nama AJK</button>
+                        <div class="grid grid-cols-1 gap-2 pt-2">
+                            <button onclick="pdfAhli()" class="w-full bg-slate-800 py-3 rounded-xl text-xs font-bold text-left px-5 hover:bg-emerald-600/20 transition-all"><i class="fas fa-users mr-3 text-emerald-500"></i> Eksport Senarai Ahli Rasmi Berdaftar</button>
+                            <button onclick="pdfKutipan()" class="w-full bg-slate-800 py-3 rounded-xl text-xs font-bold text-left px-5 hover:bg-emerald-600/20 transition-all"><i class="fas fa-wallet mr-3 text-emerald-500"></i> Laporan Analitik Kutipan Dana & Yuran</button>
+                            <button onclick="pdfAJK()" class="w-full bg-slate-800 py-3 rounded-xl text-xs font-bold text-left px-5 hover:bg-emerald-600/20 transition-all"><i class="fas fa-sitemap mr-3 text-emerald-500"></i> Senarai Kepimpinan Barisan AJK Kelab</button>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Program/Aktiviti -->
+            <section id="audit-log-section" class="section-content">
+                <div class="glass-card p-10 max-w-xl mx-auto border-t-4 border-red-500 space-y-6">
+                    <h3 class="gaming-font text-sm text-red-500 text-center uppercase tracking-widest"><i class="fas fa-history mr-2"></i> Pengurusan & Cetakan Audit Log</h3>
+                    <p class="text-[10px] text-slate-400 text-center leading-relaxed">Sila tetapkan penapis di bawah untuk mengeksport keseluruhan jejak tindakan, transaksi kewangan, dan log sekuriti sistem ke dalam bentuk dokumen PDF formal.</p>
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-[10px] text-slate-500 block mb-2">PENAPIS TAHUN</label>
+                                <select id="audit-filter-year" class="w-full">
+                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026" selected>2026</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-slate-500 block mb-2">PENAPIS TARIKH AKTIVITI (OPSYENAL)</label>
+                                <input type="date" id="audit-filter-date" class="w-full">
+                            </div>
+                        </div>
+                        <button onclick="muatTurunAuditLogPDF()" class="w-full bg-red-900/60 hover:bg-red-800 border border-red-500/30 text-red-200 py-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 uppercase tracking-wider mt-4">
+                            <i class="fas fa-file-pdf text-sm"></i> Muat Turun Dokumen Audit Log
+                        </button>
+                    </div>
+                </div>
+            </section>
+
             <section id="activities" class="section-content">
                 <div class="glass-card p-6 min-h-screen pb-20">
                     <div class="flex justify-between items-center mb-8">
                         <h3 class="gaming-font text-sm text-yellow-500 uppercase tracking-widest">Program / Aktiviti Kelab</h3>
-                        <button onclick="openAuth(()=>addActivity())" class="bg-yellow-600 px-4 py-2 rounded-lg text-[10px] font-bold">TAMBAH AKTIVITI</button>
+                        <button onclick="openAuth(()=>addActivity())" class="bg-yellow-600 px-4 py-2 rounded-lg text-[10px] font-bold role-user-only">TAMBAH AKTIVITI</button>
                     </div>
                     <div id="activity-grid" class="grid grid-cols-2 gap-6"></div>
                 </div>
             </section>
 
-            <!-- List Ahli -->
             <section id="list" class="section-content">
                 <div class="glass-card p-4 mb-4 flex gap-2">
                     <input type="text" id="search-m" placeholder="Cari Nama, IC atau ID Ahli..." onkeyup="refresh()" class="flex-1">
@@ -243,14 +341,13 @@
                 <div class="glass-card overflow-hidden">
                     <table class="w-full text-left text-xs">
                         <thead class="bg-slate-900 text-slate-500 uppercase font-bold">
-                            <tr><th class="p-4">ID Ahli</th><th class="p-4">Nama / Profil</th><th class="p-4">Kategori / Esport</th><th class="p-4">Tindakan</th></tr>
+                            <tr><th class="p-4">ID Ahli</th><th class="p-4">Nama / Profil</th><th class="p-4">Kategori / Esport</th><th class="p-4">Status / Tindakan</th></tr>
                         </thead>
                         <tbody id="member-table" class="divide-y divide-white/5"></tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- Pendaftaran Ahli -->
             <section id="reg" class="section-content">
                 <div class="glass-card p-10 max-w-2xl mx-auto border-t-4 border-blue-600">
                     <h3 class="gaming-font text-sm text-blue-500 text-center mb-8 uppercase tracking-widest">Borang Keahlian Digital</h3>
@@ -269,9 +366,9 @@
                         </div>
                         <div class="grid grid-cols-2 gap-4">
                             <select id="m-type" class="w-full">
-                                <option value="Kehormat">AHLI KEHORMAT</option>
-                                <option value="Individu" selected>AHLI INDIVIDU</option>
-                                <option value="Remaja">AHLI REMAJA (13-30 TAHUN)</option>
+                                <option value="Kehormat">AHLI KEHORMAT (DAFTAR: RM10 + TAHUNAN: RM60)</option>
+                                <option value="Individu" selected>AHLI INDIVIDU (DAFTAR: RM5 + TAHUNAN: RM48)</option>
+                                <option value="Remaja">AHLI REMAJA (DAFTAR: RM5 + TAHUNAN: RM36)</option>
                             </select>
                             <select id="m-esport" class="w-full" required>
                                 <option value="" disabled selected>PILIH JENIS SUKAN ESPORT</option>
@@ -288,10 +385,9 @@
                 </div>
             </section>
 
-            <!-- Arena Form -->
             <section id="arena" class="section-content">
                 <div class="glass-card p-10 max-w-xl mx-auto border-t-4 border-orange-500">
-                    <h3 class="gaming-font text-sm text-orange-500 text-center mb-8 uppercase">Booking Arena</h3>
+                    <h3 class="gaming-font text-sm text-orange-500 text-center mb-8 uppercase">Booking Arena Sri Nancy</h3>
                     <form onsubmit="handleArena(event)" class="space-y-4">
                         <input type="text" id="a-name" placeholder="NAMA PENYEWA" required class="w-full uppercase">
                         <div class="grid grid-cols-2 gap-4">
@@ -299,19 +395,31 @@
                             <input type="text" id="a-bill" placeholder="NO BIL (AUTO)" readonly class="w-full opacity-60 bg-slate-950">
                         </div>
                         <textarea id="a-address" placeholder="ALAMAT PENUH PENYEWA" required class="w-full h-16 text-xs"></textarea>
-                        <div class="grid grid-cols-2 gap-4">
-                            <input type="date" id="a-date" required onchange="generateBillNo()">
-                            <select id="a-time" required onchange="generateBillNo()">
-                                <option value="">Pilih Jam</option>
-                                <script>for(let i=8;i<=22;i++)document.write(`<option value="${i}">${i}:00</option>`)</script>
-                            </select>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="text-[9px] text-slate-500 block mb-1">TARIKH SEWA</label>
+                                <input type="date" id="a-date" required class="w-full" onchange="generateBillNo()">
+                            </div>
+                            <div>
+                                <label class="text-[9px] text-slate-500 block mb-1">JAM MULA</label>
+                                <select id="a-time" required class="w-full" onchange="generateBillNo()">
+                                    <option value="">Pilih Jam</option>
+                                    <script>for(let i=8;i<=21;i++)document.write(`<option value="${i}">${i}:00</option>`)</script>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[9px] text-slate-500 block mb-1">JAM TAMAT</label>
+                                <select id="a-time-end" required class="w-full" onchange="generateBillNo()">
+                                    <option value="">Pilih Jam</option>
+                                    <script>for(let i=9;i<=22;i++)document.write(`<option value="${i}">${i}:00</option>`)</script>
+                                </select>
+                            </div>
                         </div>
-                        <button type="submit" class="w-full bg-orange-600 py-3 rounded-xl font-bold uppercase">Daftar Booking (RM5)</button>
+                        <button type="submit" class="w-full bg-orange-600 py-3 rounded-xl font-bold uppercase">Daftar Booking (RM30 / Jam)</button>
                     </form>
                 </div>
             </section>
 
-            <!-- Kelulusan -->
             <section id="approval" class="section-content space-y-4 pb-20">
                 <div class="glass-card overflow-hidden">
                     <div class="p-3 bg-blue-500/10 text-blue-400 text-[10px] font-bold uppercase">Pending Keahlian</div>
@@ -326,25 +434,24 @@
         </div>
     </main>
 
-    <!-- Card ID Modal -->
     <div id="card-modal" class="modal" onclick="this.style.display='none'">
-        <div class="w-72 h-[450px] bg-slate-900 border-2 border-blue-600 rounded-[20px] p-6 flex flex-col items-center text-center shadow-2xl relative" onclick="event.stopPropagation()">
-            <img src="sdce.png" class="w-10 mb-2" onerror="this.style.display='none'">
+        <div class="w-72 h-[460px] bg-slate-900 border-2 border-blue-600 rounded-[20px] p-6 flex flex-col items-center text-center shadow-2xl relative" onclick="event.stopPropagation()">
+            <img src="logo_kelab.png" class="w-10 mb-2" onerror="this.src='sdce.png'">
             <div class="w-20 h-20 rounded-full border-2 border-blue-500 overflow-hidden mb-2 bg-slate-800">
                 <img id="card-img" src="" class="w-full h-full object-cover hidden">
                 <i id="card-icon" class="fas fa-user text-3xl mt-5 text-slate-700"></i>
             </div>
             <h2 id="card-name" class="gaming-font text-[9px] font-bold text-white uppercase mb-1">NAME</h2>
-            <p id="card-id-text" class="text-blue-500 text-[8px] font-mono mb-2">SDCE-000</p>
-            <div class="bg-blue-600/20 px-3 py-1 rounded-full mb-4">
+            <p id="card-id-text" class="text-blue-500 text-[8px] font-mono mb-1">SDCE-000</p>
+            <div class="bg-blue-600/20 px-3 py-1 rounded-full mb-3">
                 <p id="card-rank" class="text-[8px] font-black text-blue-400 uppercase">AHLI BIASA</p>
             </div>
-            <div id="qrcode" class="p-2 bg-white rounded-lg mb-4"></div>
-            <p id="card-type" class="text-[7px] text-slate-500 uppercase"></p>
+            <div id="qrcode" class="p-2 bg-white rounded-lg mb-3"></div>
+            <p id="card-type" class="text-[7px] text-slate-400 uppercase mb-1"></p>
+            <p id="card-expiry-text" class="text-[8px] font-bold text-red-400 uppercase font-mono"></p>
         </div>
     </div>
 
-    <!-- Activity Add Modal -->
     <div id="act-modal" class="modal">
         <div class="glass-card p-8 w-[400px] border-yellow-500">
             <h3 class="gaming-font text-xs mb-6 text-yellow-500 uppercase">Tambah Program Kelab</h3>
@@ -385,11 +492,57 @@
             ajk: { 2026: { presiden: null, t_presiden: null, setiausaha: null, bendahari: null } },
             activities: [],
             logs: [],
-            lastIdNum: 0
+            lastIdNum: 0,
+            dashboardPoster: ""
         };
 
         const AJK_TITLES = { presiden: "Presiden", t_presiden: "Timbalan Presiden", setiausaha: "Setiausaha", bendahari: "Bendahari" };
         let authTask = null;
+
+        const CL_NAME = "KELAB SUKAN ELEKTRONIK MAJLIS DAERAH SIMUNJAN (SDCE)";
+        const CL_ADDR_1 = "Lot 805, Gunong Ngeli New Service Centre,";
+        const CL_ADDR_2 = "94800 Simunjan, Sarawak, Malaysia.";
+        const CL_META = "No. Tel: 082-805377 | Emel: mdssimu@sarawak.gov.my";
+
+        // ASAS KEPALA SURAT LANDSCAPE BARU (TIDAK OVERLAY / WIDE GRID)
+        function injectPDFHeader(doc, titleText, subtitleText) {
+            const logoImg = document.getElementById('pdf-logo-buffer');
+            const pageWidth = doc.internal.pageSize.width; // 210mm untuk A5 melintang, 297mm untuk A4 melintang
+
+            try {
+                doc.addImage(logoImg, 'PNG', 14, 10, 16, 16);
+            } catch (e) {
+                doc.setFont('Helvetica', 'bold'); doc.setFontSize(8); doc.text("[LOGO]", 14, 18);
+            }
+
+            // Menetapkan paksi-X teks pada koordinat 35 bagi mengelakkan pertindihan imej logo
+            doc.setTextColor(15, 23, 42);
+            doc.setFont('Helvetica', 'bold');
+            doc.setFontSize(11);
+            doc.text(CL_NAME, 35, 14);
+            
+            doc.setFont('Helvetica', 'normal');
+            doc.setFontSize(8);
+            doc.setTextColor(100, 116, 139);
+            doc.text(`${CL_ADDR_1} ${CL_ADDR_2}`, 35, 19);
+            doc.text(CL_META, 35, 23);
+
+            // Blok Teks Tajuk Dokumen Sebelah Kanan (Right Aligned)
+            doc.setFont('Helvetica', 'bold');
+            doc.setFontSize(13);
+            doc.setTextColor(14, 165, 233);
+            doc.text(titleText, pageWidth - 14, 15, { align: 'right' });
+            
+            doc.setFont('Helvetica', 'normal');
+            doc.setFontSize(8.5);
+            doc.setTextColor(148, 163, 184);
+            doc.text(subtitleText, pageWidth - 14, 21, { align: 'right' });
+
+            // Garis Pemisah Sempadan Lebar Lanskap
+            doc.setDrawColor(226, 232, 240);
+            doc.setLineWidth(0.4);
+            doc.line(14, 28, pageWidth - 14, 28);
+        }
 
         function openUserPassInput() {
             document.getElementById('admin-pass-box').classList.add('hidden');
@@ -449,7 +602,7 @@
 
         function applyRoleRestrictions() {
             document.querySelectorAll('.role-user-only').forEach(el => {
-                if(currentRole === 'user' || (el.classList.contains('role-admin-only') && currentRole === 'admin')) {
+                if (currentRole === 'user' || currentRole === 'admin') {
                     el.classList.remove('hidden');
                 } else {
                     el.classList.add('hidden');
@@ -457,20 +610,17 @@
             });
 
             document.querySelectorAll('.role-admin-only').forEach(el => {
-                if(currentRole === 'admin') el.classList.remove('hidden');
-                else if(!el.classList.contains('role-user-only')) el.classList.add('hidden'); 
+                if (currentRole === 'admin') {
+                    el.classList.remove('hidden');
+                } else {
+                    if (!el.classList.contains('role-user-only')) {
+                        el.classList.add('hidden');
+                    }
+                }
             });
 
             document.querySelectorAll('.role-guest-accessible').forEach(el => {
-                if(currentRole === 'guest' || currentRole === 'user' || currentRole === 'admin') {
-                    el.classList.remove('hidden');
-                }
-            });
-
-            document.querySelectorAll('.role-admin-accessible').forEach(el => {
-                if(currentRole === 'guest' || currentRole === 'user' || currentRole === 'admin') {
-                    el.classList.remove('hidden');
-                }
+                el.classList.remove('hidden');
             });
         }
 
@@ -490,11 +640,120 @@
 
         function generateBillNo() {
             const dateInput = document.getElementById('a-date').value;
-            const timeInput = document.getElementById('a-time').value;
-            if(dateInput && timeInput) {
+            const timeStart = document.getElementById('a-time').value;
+            const timeEnd = document.getElementById('a-time-end').value;
+            
+            if(dateInput && timeStart && timeEnd) {
+                if(parseInt(timeEnd) <= parseInt(timeStart)){
+                    alert("Ralat: Waktu tamat tempahan mestilah selepas waktu mula.");
+                    document.getElementById('a-time-end').value = "";
+                    return;
+                }
                 const cleanDate = dateInput.replace(/-/g, "");
-                document.getElementById('a-bill').value = "INV" + cleanDate + String(timeInput).padStart(2, '0');
+                document.getElementById('a-bill').value = "INV" + cleanDate + "S" + String(timeStart).padStart(2, '0') + "E" + String(timeEnd).padStart(2, '0');
             }
+        }
+
+        function updateManualReceiptNo() {
+            const dateInput = document.getElementById('rcpt-date').value;
+            const rcptType = document.getElementById('rcpt-type').value;
+            
+            if(dateInput && rcptType) {
+                const cleanDate = dateInput.replace(/-/g, "");
+                const randomId = Math.floor(1000 + Math.random() * 9000); 
+                document.getElementById('rcpt-bill').value = `SDCE-${rcptType}-${cleanDate}-${randomId}`;
+            }
+        }
+
+        // 1. MANUALLY GENERATED RECEIPT (LANDSCAPE FORMAT - A5 MENEGAK DIUBAH KE LANDSCAPE)
+        function handleManualReceipt(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('rcpt-name').value.toUpperCase();
+            const rcptType = document.getElementById('rcpt-type').value;
+            const dateVal = document.getElementById('rcpt-date').value;
+            const billNo = document.getElementById('rcpt-bill').value;
+            const amount = parseFloat(document.getElementById('rcpt-amount').value).toFixed(2);
+            const words = document.getElementById('rcpt-words').value.toUpperCase();
+            const particular = document.getElementById('rcpt-particular').value.toUpperCase();
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a5' }); // Ditukarkan ke 'l' (Landscape)
+
+            doc.setFillColor(14, 165, 233); 
+            doc.rect(0, 0, 210, 6, 'F'); // Lebar diubah suai ke dimensi landskap A5 (210mm)
+
+            injectPDFHeader(doc, "RESIT RASMI", `Kategori: ${rcptType}`);
+
+            doc.setFont('Helvetica', 'normal');
+            doc.setFontSize(8.5);
+            doc.setTextColor(71, 85, 105);
+            
+            const formattedDate = dateVal.split('-').reverse().join('/');
+            doc.text(`No. Resit  :  ${billNo}`, 14, 35);
+            doc.text(`Tarikh       :  ${formattedDate}`, 14, 40);
+            doc.text(`Urusan     :  Bayaran Manual`, 14, 45);
+
+            // Bekas Kad Pembayar Lebar Lanskap
+            doc.setFillColor(248, 250, 252);
+            doc.rect(14, 50, 182, 14, 'F');
+            doc.setDrawColor(241, 245, 249);
+            doc.rect(14, 50, 182, 14, 'S');
+
+            doc.setFont('Helvetica', 'bold');
+            doc.setTextColor(51, 65, 85);
+            doc.text("DITERIMA DARIPADA (PEMBAYAR):", 18, 55);
+            doc.setTextColor(15, 23, 42);
+            doc.setFontSize(10);
+            doc.text(name, 18, 60);
+
+            const tableData = [
+                ["Item Bayaran Rasmi Kelab", particular, `RM ${amount}`]
+            ];
+
+            doc.autoTable({
+                startY: 69,
+                margin: { left: 14, right: 14 },
+                head: [["Perkara", "Deskripsi / Particulars", "Amaun"]],
+                body: tableData,
+                theme: 'striped',
+                headStyles: { fillColor: [15, 23, 42], fontSize: 8.5, fontStyle: 'bold' },
+                columnStyles: {
+                    0: { cellWidth: 50, fontSize: 8 },
+                    1: { cellWidth: 100, fontSize: 7.5 },
+                    2: { cellWidth: 32, halign: 'right', fontSize: 9, fontStyle: 'bold' }
+                },
+                styles: { textColor: [51, 65, 85], lineColor: [241, 245, 249], lineWidth: 0.2 }
+            });
+
+            let finalY = doc.lastAutoTable.finalY + 8;
+
+            doc.setFillColor(240, 249, 255);
+            doc.rect(14, finalY, 182, 16, 'F');
+            
+            doc.setFont('Helvetica', 'bold');
+            doc.setFontSize(9.5);
+            doc.setTextColor(3, 105, 161);
+            doc.text("JUMLAH BERSIH DIBAYAR:", 18, finalY + 6);
+            doc.setFontSize(12);
+            doc.text(`RM ${amount}`, 160, finalY + 7);
+
+            doc.setFont('Helvetica', 'italic');
+            doc.setFontSize(8.5);
+            doc.setTextColor(71, 85, 105);
+            doc.text(`Ringgit Malaysia: ${words} MALAYSIA SAHAJA`, 18, finalY + 12);
+
+            doc.setFont('Helvetica', 'normal');
+            doc.setFontSize(7);
+            doc.setTextColor(148, 163, 184);
+            doc.text(`* Resit rasmi digital ini dijana melalui Hub Kelab SDCE Majlis Daerah Simunjan. Sah tanpa tandatangan.`, 14, finalY + 24);
+
+            doc.save(`Resit_Manual_${billNo}.pdf`);
+            
+            addLog(`Manual Resit Dijana: ${billNo}`);
+            e.target.reset();
+            document.getElementById('rcpt-bill').value = "";
+            alert("Resit rasmi berjaya dijana dan dimuat turun!");
         }
 
         async function compressImage(base64Str, maxWidth = 150) {
@@ -513,10 +772,33 @@
             });
         }
 
+        async function uploadDashboardPoster(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+                const compressedImg = await compressImage(reader.result, 500);
+                db.dashboardPoster = compressedImg;
+                addLog("Poster Dashboard Dikemaskini");
+                save();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function deleteDashboardPoster() {
+            if(confirm("Adakah anda pasti mahu memadam poster paparan dashboard?")) {
+                db.dashboardPoster = "";
+                addLog("Poster Dashboard Dipadam");
+                save();
+            }
+        }
+
         function addLog(msg, type = 'info') {
             const time = new Date().toLocaleTimeString();
-            db.logs.unshift({ msg, time, type });
-            if(db.logs.length > 20) db.logs.pop();
+            const fullDate = new Date().toISOString().split('T')[0];
+            db.logs.unshift({ msg, time, date: fullDate, year: curYear, type });
+            if(db.logs.length > 100) db.logs.pop();
         }
 
         function save() { 
@@ -526,11 +808,6 @@
             } catch (e) { alert("Memori Penuh! Sila padam data lama."); }
         }
 
-        function cleanArenaData() {
-            // Data tidak lagi dipadam automatik di sini supaya User/Admin boleh membuat carian data arkib.
-            // Pembersihan berkala boleh dilakukan secara manual jika storan penuh.
-        }
-
         function showSection(id) {
             if(currentRole === 'guest' && id !== 'dashboard' && id !== 'arena-status' && id !== 'arena') return;
             if(currentRole === 'admin' && id !== 'dashboard' && id !== 'approval' && id !== 'list' && id !== 'arena-status') return;
@@ -538,7 +815,7 @@
             document.querySelectorAll('.section-content, .nav-btn').forEach(e => e.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             document.getElementById('btn-'+id).classList.add('active');
-            document.getElementById('page-title').innerText = id.replace('-', ' ').toUpperCase();
+            document.getElementById('page-title').innerText = id.replace(/-/g, ' ').toUpperCase();
         }
 
         function openAuth(task) { 
@@ -586,7 +863,7 @@
 
             let icYearPrefix = parseInt(ic.substring(0, 2));
             let birthYear = icYearPrefix > 26 ? 1900 + icYearPrefix : 2000 + icYearPrefix;
-            let age = 2026 - birthYear;
+            let age = curYear - birthYear;
 
             if (type === "Remaja") {
                 if (age < 13 || age > 30) {
@@ -595,19 +872,23 @@
                 }
             }
 
+            let regFee = type === 'Kehormat' ? 10 : 5;
+            let annualFee = type === 'Kehormat' ? 60 : (type === 'Individu' ? 48 : 36);
+            let totalInitialFee = regFee + annualFee;
+
             const nowStr = new Date().toISOString().split('T')[0].replace(/-/g, "");
             const randomId = Math.floor(100 + Math.random() * 900);
             const generatedBill = `REG-${nowStr}-${randomId}`;
 
-            const confirmMsg = `PENGESAHAN PENDAFTARAN AHLI\n\nNo Bil: ${generatedBill}\nNama: ${name}\nKategori: Ahli ${type}\nEsport: ${esport}\nUmur Dikesan: ${age} Tahun\n\nAdakah anda pasti mahu menghantar borang permohonan ini?`;
+            const confirmMsg = `PENGESAHAN PENDAFTARAN AHLI BARU\n\nNo Bil: ${generatedBill}\nNama: ${name}\nKategori: Ahli ${type}\nEsport: ${esport}\nUmur Dikesan: ${age} Tahun\n\nJumlah Yuran Dikenakan: RM ${totalInitialFee} (Pendaftaran: RM ${regFee} + Tahunan: RM ${annualFee})\nTarikh Expiry: 31/12/${curYear}\n\nAdakah anda pasti?`;
             
             if(confirm(confirmMsg)) {
                 db.pendingM.push({
                     name: name, ic: ic, phone: phone,
                     photo: document.getElementById('preview-img').classList.contains('hidden') ? "" : document.getElementById('preview-img').src,
-                    type: type, esport: esport, age: age, bill: generatedBill, year: 2026
+                    type: type, esport: esport, age: age, bill: generatedBill, year: curYear, expiryYear: curYear, dateReg: new Date().toISOString().split('T')[0]
                 });
-                addLog(`Apply: ${name} (${generatedBill})`);
+                addLog("Mendaftar Permohonan Ahli Baru", 'info');
                 save(); e.target.reset(); 
                 document.getElementById('preview-img').classList.add('hidden');
                 document.getElementById('upload-placeholder').classList.remove('hidden');
@@ -615,8 +896,8 @@
             }
         }
 
-        function handleArena(event) {
-            event.preventDefault();
+        function handleArena(e) {
+            e.preventDefault();
 
             if (currentRole === 'guest') {
                 const confPass = prompt("Sila masukkan Confirmation Password Guest untuk meneruskan tempahan:");
@@ -626,49 +907,337 @@
                 }
             }
 
-            alert("Sila ambil maklum: Permohonan tempahan anda akan dihantar kepada Admin untuk proses semakan dan kelulusan rasmi.");
+            const timeStart = parseInt(document.getElementById('a-time').value);
+            const timeEnd = parseInt(document.getElementById('a-time-end').value);
+            const duration = timeEnd - timeStart;
+            const totalPrice = duration * 30;
 
+            alert(`Sila ambil maklum:\nPermohonan tempahan anda selama [ ${duration} Jam ] bernilai RM ${totalPrice} akan dihantar kepada Admin untuk proses semakan dan kelulusan rasmi.`);
+
+            const billNo = document.getElementById('a-bill').value || "INV-GEN";
             db.pendingA.push({ 
                 name: document.getElementById('a-name').value.toUpperCase(), 
                 phone: document.getElementById('a-phone').value,
-                bill: document.getElementById('a-bill').value || "INV-GEN",
+                bill: billNo,
                 address: document.getElementById('a-address').value.toUpperCase(),
                 date: document.getElementById('a-date').value, 
-                time: document.getElementById('a-time').value 
+                time: timeStart,
+                timeEnd: timeEnd,
+                duration: duration,
+                price: totalPrice
             });
             
+            addLog(`Memohon Arena: ${billNo}`);
             save(); 
-            event.target.reset(); 
+            e.target.reset(); 
             alert("Booking berjaya dihantar untuk kelulusan Admin!");
         }
 
         function approveMember(i) {
             const m = db.pendingM[i];
             if(!confirm(`TINDAKAN KELULUSAN KEAHLIAN\n\nSahkan kelulusan untuk ${m.name}?`)) return;
+            
             db.lastIdNum++;
             m.staffId = "SDCE-" + String(db.lastIdNum).padStart(3, '0');
-            const key = m.type === 'Kehormat' ? 'h' : (m.type === 'Individu' ? 'i' : 'r');
-            const fee = m.type === 'Kehormat' ? 60 : (m.type === 'Individu' ? 48 : 36);
-            db.revenue[2026].reg += 5;
-            db.revenue[2026][key] += fee;
+            
+            let regFee = m.type === 'Kehormat' ? 10 : 5;
+            let annualFee = m.type === 'Kehormat' ? 60 : (m.type === 'Individu' ? 48 : 36);
+            let totalFee = regFee + annualFee;
+            
+            if(!db.revenue[curYear]) db.revenue[curYear] = {h:0, i:0, r:0, reg:0, arena:0};
+            db.revenue[curYear].reg += totalFee; 
+            
             db.approvedM.push(m);
             db.pendingM.splice(i, 1);
-            addLog(`Lulus Ahli: ${m.staffId}`, 'plus');
+            addLog(`Kelulusan Keahlian: ${m.staffId} (${m.name})`, 'plus');
             save();
+        }
+
+        function renewMember(idx) {
+            const m = db.approvedM[idx];
+            let annualFee = m.type === 'Kehormat' ? 60 : (m.type === 'Individu' ? 48 : 36);
+            
+            const konfirmasi = confirm(`PEMBAHARUAN KEAHLIAN (RENEWAL)\n\nNama: ${m.name}\nKategori: Ahli ${m.type}\n\nYuran Tahunan Renewal: RM ${annualFee}\nTarikh Expiry Baru: 31/12/${curYear}\n\nAdakah anda pasti mahu memperbaharui keahlian ini?`);
+            if(!konfirmasi) return;
+
+            if(!db.revenue[curYear]) db.revenue[curYear] = {h:0, i:0, r:0, reg:0, arena:0};
+            db.revenue[curYear].reg += annualFee; 
+            
+            m.expiryYear = curYear; 
+            
+            addLog(`Renewal Keahlian: ${m.staffId}`, 'plus');
+            save();
+            alert(`Keahlian ${m.staffId} berjaya diperbaharui sehingga 31/12/${curYear}!`);
         }
 
         function openArenaApprovalMenu(i, action) {
             const a = db.pendingA[i];
-            const msg = `TINDAKAN KELULUSAN ARENA\n\nNo Bil: ${a.bill}\nNama: ${a.name}\nTarikh/Masa: ${a.date} (${a.time}:00)\n\nAdakah anda pasti mahu [${action.toUpperCase()}] permohonan ini?`;
+            const msg = `TINDAKAN KELULUSAN ARENA\n\nNo Bil: ${a.bill}\nNama: ${a.name}\nTarikh/Masa: ${a.date} (${a.time}:00 - ${a.timeEnd}:00)\nDurasi: ${a.duration} Jam | Total: RM ${a.price}\n\nAdakah anda pasti mahu [${action.toUpperCase()}] permohonan ini?`;
             if(confirm(msg)) {
                 if(action === 'approve') {
-                    db.revenue[2026].arena += 5;
+                    if(!db.revenue[curYear]) db.revenue[curYear] = {h:0, i:0, r:0, reg:0, arena:0};
+                    db.revenue[curYear].arena += a.price; 
                     db.approvedA.push(a); 
-                    addLog(`Lulus Arena: ${a.bill}`, 'plus');
+                    addLog(`Kelulusan Sewa Arena: ${a.bill}`, 'plus');
                 } else {
-                    addLog(`Tolak Arena: ${a.bill}`, 'minus');
+                    addLog(`Penolakan Sewa Arena: ${a.bill}`, 'minus');
                 }
                 db.pendingA.splice(i, 1);
+                save();
+            }
+        }
+
+        // 2. ARENA RECEIPT (LANDSCAPE FORMAT - A5)
+        function muatTurunResitArena(billNo) {
+            const booking = db.approvedA.find(a => a.bill === billNo);
+            if (!booking) {
+                alert("Ralat: Data transaksi tempahan tidak ditemui.");
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a5' }); // Lanskap
+
+            doc.setFillColor(59, 130, 246);
+            doc.rect(0, 0, 210, 6, 'F');
+
+            injectPDFHeader(doc, "RESIT ARENA", "Sewa Sri Nancy");
+
+            doc.setFont('Helvetica', 'normal');
+            doc.setFontSize(8.5);
+            doc.setTextColor(71, 85, 105);
+            
+            const tarikhResit = booking.date ? booking.date.split('-').reverse().join('/') : new Date().toLocaleDateString('ms-MY');
+            
+            doc.text(`No. Resit  :  ${booking.bill}`, 14, 35);
+            doc.text(`Tarikh       :  ${tarikhResit}`, 14, 40);
+            doc.text(`Kaedah     :  Tunai / Hub-Wallet`, 14, 45);
+
+            doc.setFillColor(248, 250, 252);
+            doc.rect(14, 50, 182, 14, 'F');
+            doc.setDrawColor(241, 245, 249);
+            doc.rect(14, 50, 182, 14, 'S');
+
+            doc.setFont('Helvetica', 'bold');
+            doc.setTextColor(51, 65, 85);
+            doc.text("DITERIMA DARIPADA (PEMBAYAR):", 18, 55);
+            doc.setTextColor(15, 23, 42);
+            doc.setFontSize(10);
+            doc.text(booking.name.toUpperCase(), 18, 60);
+
+            const dataJadual = [
+                ["Sewa Slot Masa Arena Sri Nancy", `Slot: ${booking.time}:00 - ${booking.timeEnd || parseInt(booking.time)+1}:00\nDurasi: ${booking.duration || 1} Jam`, `RM ${booking.price || 30}.00`]
+            ];
+
+            doc.autoTable({
+                startY: 69,
+                margin: { left: 14, right: 14 },
+                head: [["Perkara / Deskripsi", "Maklumat Khas", "Amaun"]],
+                body: dataJadual,
+                theme: 'striped',
+                headStyles: { fillColor: [15, 23, 42], fontSize: 8.5, fontStyle: 'bold' },
+                columnStyles: {
+                    0: { cellWidth: 50, fontSize: 8 },
+                    1: { cellWidth: 100, fontSize: 7.5 },
+                    2: { cellWidth: 32, halign: 'right', fontSize: 9, fontStyle: 'bold' }
+                },
+                styles: { textColor: [51, 65, 85], lineColor: [241, 245, 249], lineWidth: 0.2 }
+            });
+
+            let finalY = doc.lastAutoTable.finalY + 8;
+
+            doc.setFillColor(239, 246, 255);
+            doc.rect(14, finalY, 182, 16, 'F');
+            
+            doc.setFont('Helvetica', 'bold');
+            doc.setFontSize(9.5);
+            doc.setTextColor(29, 78, 216);
+            doc.text("JUMLAH BERSIH DIBAYAR:", 18, finalY + 6);
+            doc.setFontSize(12);
+            doc.text(`RM ${booking.price || 30}.00`, 160, finalY + 7);
+
+            let wordsText = "TIGA PULUH RINGGIT MALAYSIA SAHAJA";
+            if (booking.price === 60) wordsText = "ENAM PULUH RINGGIT MALAYSIA SAHAJA";
+            else if (booking.price === 90) wordsText = "SEMBILAN PULUH RINGGIT MALAYSIA SAHAJA";
+            else if (booking.price > 90) wordsText = "SEBANYAK RINGGIT MALAYSIA BERKAITAN SAHAJA";
+
+            doc.setFont('Helvetica', 'italic');
+            doc.setFontSize(8.5);
+            doc.setTextColor(71, 85, 105);
+            doc.text(`Ringgit Malaysia: ${wordsText}`, 18, finalY + 12);
+
+            doc.setFont('Helvetica', 'normal');
+            doc.setFontSize(7);
+            doc.setTextColor(148, 163, 184);
+            doc.text(`* Resit rasmi digital ini dijana melalui Hub Kelab SDCE Majlis Daerah Simunjan.`, 14, finalY + 24);
+
+            doc.save(`Resit_SriNancy_${booking.bill}.pdf`);
+        }
+
+        // 3. AUDIT LOG (LANDSCAPE FORMAT - A4)
+        function muatTurunAuditLogPDF() {
+            const filterYear = parseInt(document.getElementById('audit-filter-year').value);
+            const filterDate = document.getElementById('audit-filter-date').value;
+
+            let senaraiAudit = db.logs || [];
+            senaraiAudit = senaraiAudit.filter(l => !l.year || l.year === filterYear);
+
+            if (filterDate) {
+                senaraiAudit = senaraiAudit.filter(l => l.date === filterDate);
+            }
+
+            if (senaraiAudit.length === 0) {
+                alert("Tiada rekod data log ditemui untuk padanan penapisan ini.");
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' }); // Lanskap A4
+
+            doc.setFillColor(220, 38, 38); 
+            doc.rect(0, 0, 297, 8, 'F'); // Kelebaran melintang 297mm
+
+            injectPDFHeader(doc, "LOG AUDIT SISTEM", `Sesi Audit Tahun: ${filterYear}`);
+
+            const barisanJadual = senaraiAudit.map((l, indeks) => [
+                String(indeks + 1),
+                l.date ? l.date.split('-').reverse().join('/') : '-',
+                l.time || '-',
+                l.msg || 'Tiada Keterangan'
+            ]);
+
+            doc.autoTable({
+                startY: 35,
+                margin: { left: 14, right: 14 },
+                head: [["Bil", "Tarikh", "Masa", "Keterangan / Jejak Log Tindakan Sistem"]],
+                body: barisanJadual,
+                theme: 'grid',
+                headStyles: { fillColor: [30, 41, 59], fontSize: 9, fontStyle: 'bold' },
+                columnStyles: { 0: { cellWidth: 15 }, 1: { cellWidth: 35 }, 2: { cellWidth: 35 } }
+            });
+
+            doc.save(`AuditLog_SDCE_${filterYear}.pdf`);
+        }
+
+        // 4. MEMBERS REPORT (LANDSCAPE FORMAT - A4)
+        function pdfAhli() {
+            const rYear = parseInt(document.getElementById('report-year').value);
+            const rDate = document.getElementById('report-date').value;
+
+            let listM = db.approvedM || [];
+            listM = listM.filter(m => !m.year || m.year === rYear);
+            if(rDate) {
+                listM = listM.filter(m => m.dateReg === rDate);
+            }
+
+            if(listM.length === 0) return alert("Tiada rekod data ahli ditemui bagi padanan saringan ini.");
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' }); // Lanskap A4
+
+            injectPDFHeader(doc, "SENARAI NAMA AHLI RASMI BERDAFTAR", `Tahun Daftar: ${rYear}`);
+
+            const bodyData = listM.map((m, idx) => [
+                String(idx+1), m.staffId, m.name, m.ic, m.phone, m.type, m.esport || '-', `31/12/${m.expiryYear || rYear}`
+            ]);
+
+            doc.autoTable({
+                startY: 35,
+                margin: { left: 14, right: 14 },
+                head: [["Bil", "ID Ahli", "Nama Lengkap", "No. IC", "No Tel", "Kategori", "Esport", "Expiry"]],
+                body: bodyData,
+                theme: 'striped',
+                headStyles: { fillColor: [59, 130, 246] }
+            });
+            doc.save(`Laporan_Ahli_SDCE_${rYear}.pdf`);
+        }
+
+        // 5. FINANCE REPORT (LANDSCAPE FORMAT - A4)
+        function pdfKutipan() {
+            const rYear = parseInt(document.getElementById('report-year').value);
+            const rDate = document.getElementById('report-date').value;
+
+            let filterM = db.approvedM.filter(m => !m.year || m.year === rYear);
+            let filterA = db.approvedA.filter(a => {
+                let match = true;
+                if(a.date) {
+                    let yr = parseInt(a.date.substring(0,4));
+                    if(yr !== rYear) match = false;
+                    if(rDate && a.date !== rDate) match = false;
+                }
+                return match;
+            });
+
+            if(rDate) {
+                filterM = filterM.filter(m => m.dateReg === rDate);
+            }
+
+            let totalKehormat = 0, totalIndividu = 0, totalRemaja = 0;
+            filterM.forEach(m => {
+                if(m.type === 'Kehormat') totalKehormat += 70; 
+                else if(m.type === 'Individu') totalIndividu += 53; 
+                else totalRemaja += 41; 
+            });
+
+            let totalArena = 0;
+            filterA.forEach(a => { totalArena += (a.price || 30); });
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' }); // Lanskap A4
+
+            injectPDFHeader(doc, "LAPORAN ANALITIK KUTIPAN DANA & YURAN KELAB", `Tahun Kewangan: ${rYear}`);
+
+            const bodyKewangan = [
+                ["1", "Kutipan Keahlian - Kategori Ahli Kehormat", `Total Ahli: ${filterM.filter(m=>m.type==='Kehormat').length}`, `RM ${totalKehormat}.00`],
+                ["2", "Kutipan Keahlian - Kategori Ahli Individu", `Total Ahli: ${filterM.filter(m=>m.type==='Individu').length}`, `RM ${totalIndividu}.00`],
+                ["3", "Kutipan Keahlian - Kategori Ahli Remaja", `Total Ahli: ${filterM.filter(m=>m.type==='Remaja').length}`, `RM ${totalRemaja}.00`],
+                ["4", "Kutipan Penyewaan Bersepadu Arena Sri Nancy", `Total Transaksi Tempahan: ${filterA.length}`, `RM ${totalArena}.00`],
+                ["", "JUMLAH KESELURUHAN KUTIPAN DANA KELAB", "", `RM ${totalKehormat + totalIndividu + totalRemaja + totalArena}.00`]
+            ];
+
+            doc.autoTable({
+                startY: 35,
+                margin: { left: 14, right: 14 },
+                head: [["Bil", "Kategori Aliran Pendapatan", "Jumlah Kiraan Data", "Amaun Kutipan Bersih"]],
+                body: bodyKewangan,
+                theme: 'grid',
+                headStyles: { fillColor: [16, 185, 129] }
+            });
+            doc.save(`Laporan_Kewangan_SDCE_${rYear}.pdf`);
+        }
+
+        // 6. MANAGEMENT COMMITTEE REPORT (LANDSCAPE FORMAT - A4)
+        function pdfAJK() {
+            const rYear = parseInt(document.getElementById('report-year').value);
+            const currentAJK = db.ajk[rYear] || {};
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' }); // Lanskap A4
+
+            injectPDFHeader(doc, "SENARAI NAMA BARISAN KEPIMPINAN AJK KELAB", `Sesi Khidmat: ${rYear}`);
+
+            const bodyAJK = [
+                ["1", "PRESIDEN", currentAJK.presiden ? currentAJK.presiden.name : "KOSONG"],
+                ["2", "TIMBALAN PRESIDEN", currentAJK.t_presiden ? currentAJK.t_presiden.name : "KOSONG"],
+                ["3", "SETIAUSAHA", currentAJK.setiausaha ? currentAJK.setiausaha.name : "KOSONG"],
+                ["4", "BENDAHARI", currentAJK.bendahari ? currentAJK.bendahari.name : "KOSONG"]
+            ];
+
+            doc.autoTable({
+                startY: 35,
+                margin: { left: 14, right: 14 },
+                head: [["Bil", "Jawatan Utama", "Nama Pegawai Dilantik"]],
+                body: bodyAJK,
+                theme: 'striped',
+                headStyles: { fillColor: [168, 85, 247] }
+            });
+            doc.save(`Laporan_Kepimpinan_AJK_${rYear}.pdf`);
+        }
+
+        function deleteNews(index) {
+            if(confirm("Adakah anda pasti mahu memadam kenyataan rasmi ini?")) {
+                db.news.splice(index, 1);
+                addLog("Kenyataan Rasmi Dipadam");
                 save();
             }
         }
@@ -676,7 +1245,7 @@
         function rejectMember(i) {
             if(confirm("Tolak permohonan keahlian ini?")) {
                 db.pendingM.splice(i, 1);
-                addLog(`Rejected Member`, 'minus');
+                addLog(`Penolakan Keahlian: Rekod Dibuang`, 'minus');
                 save();
             }
         }
@@ -692,7 +1261,7 @@
             if(!title) return alert("Sila isi tajuk!");
             db.activities.unshift({ title, desc, img, status, date: new Date().toLocaleDateString() });
             document.getElementById('act-modal').style.display = 'none';
-            addLog(`Program Baru: ${title}`);
+            addLog(`Program Baru Ditambah: ${title}`);
             save();
             document.getElementById('act-title').value = '';
             document.getElementById('act-desc').value = '';
@@ -706,20 +1275,20 @@
             const title = prompt("Masukkan Tajuk Kenyataan:"); if(!title) return;
             const body = prompt("Masukkan Kandungan Kenyataan:"); if(!body) return;
             db.news.unshift({ title, body, date: new Date().toLocaleDateString() });
-            addLog(`Kenyataan Baru: ${title}`);
+            addLog(`Kenyataan Hub Baru: ${title}`);
             save();
         }
 
         function assignAJK(idx, role) {
             if(!role) return;
-            if(!db.ajk[2026]) db.ajk[2026] = {};
+            if(!db.ajk[curYear]) db.ajk[curYear] = {};
             const member = db.approvedM[idx];
             
             const konfirmasi = confirm(`PENGESAHAN PERLANTIKAN AJK\n\nAdakah anda pasti mahu melantik ${member.name} sebagai ${AJK_TITLES[role]}?`);
             if(!konfirmasi) return;
 
-            db.ajk[2026][role] = { name: member.name, photo: member.photo || "" };
-            addLog(`Lantik AJK: ${role.toUpperCase()}`);
+            db.ajk[curYear][role] = { name: member.name, photo: member.photo || "" };
+            addLog(`Lantikan Jawatan AJK: ${role.toUpperCase()} Baru`);
             save();
         }
 
@@ -727,9 +1296,9 @@
             const konfirmasi = confirm(`PENGESAHAN KOSONGKAN JAWATAN\n\nAdakah anda pasti mahu mengosongkan jawatan ${AJK_TITLES[role]}?`);
             if(!konfirmasi) return;
 
-            if(db.ajk[2026] && db.ajk[2026][role]) {
-                delete db.ajk[2026][role];
-                addLog(`Buang AJK: ${role.toUpperCase()}`);
+            if(db.ajk[curYear] && db.ajk[curYear][role]) {
+                delete db.ajk[curYear][role];
+                addLog(`Pengosongan Jawatan AJK: ${role.toUpperCase()}`);
                 save();
             }
         }
@@ -765,10 +1334,13 @@
             document.getElementById('card-id-text').innerText = m.staffId;
             document.getElementById('card-type').innerText = m.type + " - " + m.phone;
             document.getElementById('card-rank').innerText = m.type === 'Kehormat' ? 'AHLI KEHORMAT' : (m.type === 'Individu' ? 'AHLI INDIVIDU' : 'AHLI REMAJA');
+            document.getElementById('card-expiry-text').innerText = `EXPIRY: 31/12/${m.expiryYear || curYear}`;
+            
             const img = document.getElementById('card-img');
             const icon = document.getElementById('card-icon');
             if(m.photo) { img.src = m.photo; img.classList.remove('hidden'); icon.classList.add('hidden'); } 
             else { img.classList.add('hidden'); icon.classList.remove('hidden'); }
+            
             document.getElementById('qrcode').innerHTML = "";
             new QRCode(document.getElementById('qrcode'), { text: m.staffId, width: 80, height: 80 });
             document.getElementById('card-modal').style.display = 'flex';
@@ -783,8 +1355,8 @@
                         <p class="text-[10px] text-purple-400 font-mono">No Bil: ${m.bill || 'N/A'}</p>
                     </div>
                     <div class="flex gap-2">
-                        <button onclick="openAuth(()=>approveMember(${i}))" class="bg-emerald-600 px-3 py-1 rounded font-bold text-[10px]">LULUS</button>
-                        <button onclick="openAuth(()=>rejectMember(${i}))" class="bg-red-600 px-3 py-1 rounded font-bold text-[10px]">TOLAK</button>
+                        <button onclick="openAuth(()=> approveMember(${i}))" class="bg-emerald-600 px-3 py-1 rounded font-bold text-[10px]">LULUS</button>
+                        <button onclick="openAuth(()=> rejectMember(${i}))" class="bg-red-600 px-3 py-1 rounded font-bold text-[10px]">TOLAK</button>
                     </div>
                 </div>
             `).join('') || '<div class="p-4 text-center text-slate-600 italic text-xs">Tiada permohonan keahlian pending.</div>';
@@ -794,22 +1366,18 @@
                     <div>
                         <p class="text-white font-bold uppercase">${a.name} (${a.phone})</p>
                         <p class="text-[10px] text-orange-400 font-mono">Bil: ${a.bill}</p>
-                        <p class="text-[10px] text-slate-500">Masa: ${a.date} | Jam: ${a.time}:00</p>
+                        <p class="text-[10px] text-slate-500">Masa: ${a.date} | Jam: ${a.time}:00 - ${a.timeEnd}:00 (${a.duration} Jam)</p>
                     </div>
                     <div class="flex gap-2">
-                        <button onclick="openAuth(()=>openArenaApprovalMenu(${i}, 'approve'))" class="bg-emerald-600 px-3 py-1 rounded font-bold text-[10px]">LULUS</button>
-                        <button onclick="openAuth(()=>openArenaApprovalMenu(${i}, 'reject'))" class="bg-red-600 px-3 py-1 rounded font-bold text-[10px]">TOLAK</button>
+                        <button onclick="openAuth(()=> openArenaApprovalMenu(${i}, 'approve'))" class="bg-emerald-600 px-3 py-1 rounded font-bold text-[10px]">LULUS</button>
+                        <button onclick="openAuth(()=> openArenaApprovalMenu(${i}, 'reject'))" class="bg-red-600 px-3 py-1 rounded font-bold text-[10px]">TOLAK</button>
                     </div>
                 </div>
             `).join('') || '<div class="p-4 text-center text-slate-600 italic text-xs">Tiada permohonan arena pending.</div>';
         }
 
-        function pdfAhli() { alert("Ciri cetak PDF Ahli bakal diintegrasikan."); }
-        function pdfKutipan() { alert("Ciri cetak PDF Kutipan Dana bakal diintegrasikan."); }
-        function pdfAJK() { alert("Ciri cetak PDF Senarai AJK bakal diintegrasikan."); }
-
         function refresh() {
-            const yr = db.revenue[2026] || {h:0, i:0, r:0, reg:0, arena:0};
+            const yr = db.revenue[curYear] || {h:0, i:0, r:0, reg:0, arena:0};
             
             document.getElementById('stat-total').innerText = db.approvedM.length;
             document.getElementById('stat-rev').innerText = `RM ${yr.h + yr.i + yr.r + yr.reg + yr.arena}`;
@@ -819,9 +1387,23 @@
 
             updateMembershipChart();
 
+            const posterImg = document.getElementById('dashboard-poster-img');
+            const posterPlaceholder = document.getElementById('dashboard-poster-placeholder');
+            const deletePosterBtn = document.getElementById('delete-poster-btn');
+            if (db.dashboardPoster) {
+                posterImg.src = db.dashboardPoster;
+                posterImg.classList.remove('hidden');
+                posterPlaceholder.classList.add('hidden');
+                if (deletePosterBtn) deletePosterBtn.classList.remove('hidden');
+            } else {
+                posterImg.classList.add('hidden');
+                posterPlaceholder.classList.remove('hidden');
+                if (deletePosterBtn) deletePosterBtn.classList.add('hidden');
+            }
+
             document.getElementById('transaction-log').innerHTML = db.logs.map(l => `<div><span class="text-slate-500">[${l.time}]</span> ${l.msg}</div>`).join('');
 
-            const currentAJK = db.ajk[2026] || {};
+            const currentAJK = db.ajk[curYear] || {};
             document.getElementById('ajk-grid').innerHTML = Object.entries(AJK_TITLES).map(([key, title]) => {
                 const h = currentAJK[key];
                 return `<div class="bg-gradient-to-b from-slate-800 to-slate-900 border border-white/10 p-6 rounded-2xl text-center group relative shadow-lg">
@@ -852,22 +1434,18 @@
                 </div>
             `).join('');
 
-            // PENGURUSAN PAPARAN DAN CARIAN STATUS ARENA SRI NANCY
             const now = new Date();
             const curHour = now.getHours();
-            const todayStr = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Kuala_Lumpur' });
+            const todayStr = now.toLocaleDateString('en-CA');
             
-            // Dapatkan nilai input carian (Jika ada)
             const searchName = document.getElementById('search-arena-name') ? document.getElementById('search-arena-name').value.toUpperCase() : "";
             const searchDate = document.getElementById('search-arena-date') ? document.getElementById('search-arena-date').value : "";
 
             let filteredArena = db.approvedA;
 
             if (currentRole === 'guest') {
-                // Peranan Guest: Sekat tegar untuk paparan HARI INI SAHAJA tanpa carian
                 filteredArena = filteredArena.filter(a => a.date === todayStr);
             } else {
-                // Peranan User / Admin: Proses carian jika diisi, jika kosong paparkan lalai hari ini
                 if (searchName || searchDate) {
                     if (searchName) {
                         filteredArena = filteredArena.filter(a => a.name.includes(searchName) || a.bill.toUpperCase().includes(searchName));
@@ -876,51 +1454,44 @@
                         filteredArena = filteredArena.filter(a => a.date === searchDate);
                     }
                 } else {
-                    // Jika tiada kata kunci carian diisi, paparan lalai tetap tarikh hari ini
                     filteredArena = filteredArena.filter(a => a.date === todayStr);
                 }
             }
             
+            // KEMAS KINI PAPARAN: Butang Resit kini dibuka untuk peranan Guest juga (Kelas 'hidden' dibuang)
             document.getElementById('sri-nancy-list').innerHTML = filteredArena.map(a => {
-                const hr = parseInt(a.time);
+                const startHr = parseInt(a.time);
+                const endHr = a.timeEnd ? parseInt(a.timeEnd) : startHr + 1;
                 let st = "", badgeStyle = "";
                 
-                // Indikator status masa (Hanya logik tepat untuk paparan hari ini)
                 if (a.date !== todayStr) {
                     st = "Selesai Arkib";
                     badgeStyle = "bg-slate-700/40 text-slate-400 border border-slate-600";
                 } else {
-                    if (hr === curHour) { st = "Sedang Digunakan"; badgeStyle = "bg-emerald-500/20 text-emerald-400 border border-emerald-500 pulse-green"; }
-                    else if (hr > curHour) { st = "Sedang Menunggu Giliran"; badgeStyle = "bg-orange-500/20 text-orange-400 border border-orange-500"; }
+                    if (curHour >= startHr && curHour < endHr) { st = "Sedang Digunakan"; badgeStyle = "bg-emerald-500/20 text-emerald-400 border border-emerald-500 pulse-green"; }
+                    else if (curHour < startHr) { st = "Sedang Menunggu Giliran"; badgeStyle = "bg-orange-500/20 text-orange-400 border border-orange-500"; }
                     else { st = "Masa Sudah Tamat"; badgeStyle = "bg-red-500/20 text-red-500 border border-red-600/40 opacity-60"; }
                 }
 
-                if (currentRole === 'user' || currentRole === 'admin') {
-                    return `<div class="glass-card p-5 border-l-4 ${a.date !== todayStr ? 'border-slate-600' : (hr === curHour ? 'border-emerald-500' : (hr > curHour ? 'border-orange-500' : 'border-red-600'))}">
-                        <div class="flex justify-between items-start flex-wrap gap-2">
-                            <div class="space-y-1">
-                                <p class="text-white font-bold text-sm uppercase tracking-wide">${a.name}</p>
-                                <div class="grid grid-cols-2 gap-x-6 gap-y-1 text-[11px] text-slate-400 font-medium">
-                                    <p><span class="text-slate-500 font-bold">No. Telefon:</span> ${a.phone}</p>
-                                    <p><span class="text-slate-500 font-bold">No. Bil:</span> <span class="font-mono text-blue-400">${a.bill}</span></p>
-                                    <p class="col-span-2"><span class="text-slate-500 font-bold">Alamat:</span> ${a.address || 'TIADA ALAMAT'}</p>
-                                </div>
-                                <p class="text-[11px] text-slate-300 flex items-center gap-2 pt-1 font-semibold">
-                                    <i class="fas fa-calendar-day text-blue-500"></i> Tarikh: ${a.date} | <i class="fas fa-clock text-orange-500"></i> Slot Masa: ${a.time}:00 - ${hr+1}:00
-                                </p>
+                return `<div class="glass-card p-5 border-l-4 ${a.date !== todayStr ? 'border-slate-600' : (curHour >= startHr && curHour < endHr ? 'border-emerald-500' : (curHour < startHr ? 'border-orange-500' : 'border-red-600'))}">
+                    <div class="flex justify-between items-start flex-wrap gap-2">
+                        <div class="space-y-1">
+                            <p class="text-white font-bold text-sm uppercase tracking-wide">${a.name}</p>
+                            <div class="grid grid-cols-2 gap-x-6 gap-y-1 text-[11px] text-slate-400 font-medium">
+                                <p><span class="text-slate-500 font-bold">No. Telefon:</span> ${a.phone}</p>
+                                <p><span class="text-slate-500 font-bold">No. Bil:</span> <span class="font-mono text-blue-400">${a.bill}</span></p>
+                                <p class="col-span-2"><span class="text-slate-500 font-bold">Alamat:</span> ${a.address || 'TIADA ALAMAT'}</p>
                             </div>
+                            <p class="text-[11px] text-slate-300 flex items-center gap-2 pt-1 font-semibold">
+                                <i class="fas fa-calendar-day text-blue-500"></i> Tarikh: ${a.date} | <i class="fas fa-clock text-orange-500"></i> Slot Masa: ${startHr}:00 - ${endHr}:00 (${a.duration || 1} Jam)
+                            </p>
+                        </div>
+                        <div class="flex flex-col items-end gap-2">
                             <div class="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider ${badgeStyle}">${st}</div>
+                            <button onclick="muatTurunResitArena('${a.bill}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[9px] px-2.5 py-1 rounded transition-all flex items-center gap-1.5"><i class="fas fa-file-invoice-dollar"></i> RESIT</button>
                         </div>
-                    </div>`;
-                } else {
-                    return `<div class="glass-card p-4 flex justify-between items-center border-l-4 ${hr === curHour ? 'border-emerald-500' : (hr > curHour ? 'border-orange-500' : 'border-red-600')}">
-                        <div>
-                            <p class="text-white font-bold text-sm uppercase">${a.name}</p>
-                            <p class="text-[11px] text-slate-500 flex items-center gap-2 mt-0.5"><i class="fas fa-clock text-[10px]"></i> Slot Masa: ${a.time}:00 - ${hr+1}:00</p>
-                        </div>
-                        <div class="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider ${badgeStyle}">${st}</div>
-                    </div>`;
-                }
+                    </div>
+                </div>`;
             }).join('') || '<div class="text-center py-10 text-slate-700 italic text-xs">Tiada sebarang rekod tempahan (booking) ditemui untuk padanan carian ini.</div>';
 
             renderApproval();
@@ -930,22 +1501,40 @@
                 const filtered = db.approvedM.filter(m => m.name.includes(sq) || m.ic.includes(sq) || m.staffId.includes(sq));
                 document.getElementById('member-table').innerHTML = filtered.map((m) => {
                     const idx = db.approvedM.indexOf(m);
+                    
+                    const isExpired = (m.expiryYear && m.expiryYear < curYear);
+                    const statusBadge = isExpired 
+                        ? `<span class="bg-red-500/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider">EXPIRED</span>`
+                        : `<span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider">AKTIF</span>`;
+
                     return `<tr class="hover:bg-white/5">
                         <td class="p-4 font-mono text-blue-400 font-bold">${m.staffId}</td>
                         <td class="p-4 flex items-center gap-3">
-                            <span class="font-bold text-white uppercase block">${m.name}</span>
+                            <div>
+                                <span class="font-bold text-white uppercase block">${m.name}</span>
+                                <span class="text-[9px] text-slate-500 block">Exp: 31/12/${m.expiryYear || curYear}</span>
+                            </div>
                         </td>
-                        <td class="p-4">${m.type}</td>
+                        <td class="p-4">
+                            <div class="space-y-1">
+                                <span class="block">${m.type}</span>
+                                ${statusBadge}
+                            </div>
+                        </td>
                         <td class="p-4 flex gap-2 items-center">
                             <button onclick="viewCard(${idx})" class="bg-blue-600/20 text-blue-400 px-2 py-1 rounded text-[9px] font-bold">KAD</button>
                             
-                            <select onchange="assignAJK(${idx}, this.value); this.value='';" class="bg-slate-900 border border-slate-700 text-white rounded text-[9px] p-1 uppercase font-bold role-user-only role-admin-only">
-                                <option value="">+ LANTIK AJK</option>
-                                <option value="presiden">PRESIDEN</option>
-                                <option value="t_presiden">TIMB. PRESIDEN</option>
-                                <option value="setiausaha">SETIAUSAHA</option>
-                                <option value="bendahari">BENDAHARI</option>
-                            </select>
+                            ${isExpired ? `
+                                <button onclick="openAuth(()=> renewMember(${idx}))" class="bg-orange-600 hover:bg-orange-700 text-white px-2 py-1 rounded text-[9px] font-bold tracking-wider role-user-only role-admin-only">RENEW</button>
+                            ` : `
+                                <select onchange="assignAJK(${idx}, this.value); this.value='';" class="bg-slate-900 border border-slate-700 text-white rounded text-[9px] p-1 uppercase font-bold role-user-only role-admin-only">
+                                    <option value="">+ LANTIK AJK</option>
+                                    <option value="presiden">PRESIDEN</option>
+                                    <option value="t_presiden">TIMB. PRESIDEN</option>
+                                    <option value="setiausaha">SETIAUSAHA</option>
+                                    <option value="bendahari">BENDAHARI</option>
+                                </select>
+                            `}
 
                             <button onclick="openAuth(()=> { db.approvedM.splice(${idx},1); save(); })" class="text-red-500 px-2"><i class="fas fa-trash-alt"></i></button>
                         </td>
@@ -953,11 +1542,12 @@
                 }).join('');
             }
 
-            document.getElementById('news-list').innerHTML = db.news.map(n => `
-                <div class="bg-white/5 p-3 rounded-lg">
+            document.getElementById('news-list').innerHTML = db.news.map((n, idx) => `
+                <div class="bg-white/5 p-3 rounded-lg relative group">
+                    <button onclick="openAuth(()=> deleteNews(${idx}))" class="absolute top-2 right-2 text-red-400 hover:text-red-500 opacity-0 group-hover:opacity-100 text-[10px] transition-all role-user-only"><i class="fas fa-trash"></i></button>
                     <div class="flex justify-between items-center mb-1">
-                        <h5 class="text-white font-bold text-[10px] uppercase">${n.title}</h5>
-                        <span class="text-[8px] text-slate-500">${n.date}</span>
+                        <h5 class="text-white font-bold text-[10px] uppercase pr-6 truncate">${n.title}</h5>
+                        <span class="text-[8px] text-slate-500 shrink-0">${n.date}</span>
                     </div>
                     <p class="text-[9px] text-slate-400 leading-normal">${n.body}</p>
                 </div>
