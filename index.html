@@ -36,7 +36,6 @@
     <!-- PAGE LOGIN -->
     <div id="login-page" class="fixed inset-0 bg-slate-950 z-[99999] flex items-center justify-center p-4">
         <div class="glass-card p-8 w-full max-w-md border-blue-500/30 shadow-2xl text-center">
-            <!-- Saiz Logo diperbesarkan di sini menggunakan w-40 h-40 -->
             <div class="flex justify-center items-center mb-6">
                 <img src="sdce.png" class="w-40 h-40 object-contain drop-shadow-[0_0_20px_rgba(59,130,246,0.6)]" alt="Logo SDCE">
             </div>
@@ -46,7 +45,7 @@
             <div class="space-y-3">
                 <button onclick="selectRole('guest')" class="w-full bg-slate-800 hover:bg-slate-700 py-3 rounded-xl font-bold text-xs flex justify-between items-center px-6 transition-all">
                     <span><i class="fas fa-user-ghost mr-3 text-slate-400"></i> GUEST</span>
-                    <span class="text-[9px] bg-slate-900 px-2 py-0.5 rounded text-slate-400">Lihat Sahaja</span>
+                    <span class="text-[9px] bg-slate-900 px-2 py-0.5 rounded text-slate-400">Lihat & Arena</span>
                 </button>
                 <button onclick="openUserPassInput()" class="w-full bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 py-3 rounded-xl font-bold text-xs flex justify-between items-center px-6 transition-all">
                     <span><i class="fas fa-user mr-3 text-blue-400"></i> USER</span>
@@ -105,8 +104,8 @@
             <button onclick="showSection('dashboard')" id="btn-dashboard" class="nav-btn active flex items-center gap-3 px-4 py-2.5 text-xs font-bold"><i class="fas fa-chart-line"></i> Dashboard</button>
             <button onclick="showSection('list')" id="btn-list" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold role-user-only role-admin-only"><i class="fas fa-users"></i> Ahli Rasmi</button>
             <button onclick="showSection('reg')" id="btn-reg" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold role-user-only"><i class="fas fa-id-card"></i> Pendaftaran</button>
-            <button onclick="showSection('arena')" id="btn-arena" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold role-user-only"><i class="fas fa-volleyball-ball"></i> Arena</button>
-            <button onclick="showSection('arena-status')" id="btn-arena-status" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold"><i class="fas fa-clock"></i> Status Sri Nancy</button>
+            <button onclick="showSection('arena')" id="btn-arena" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold role-guest-accessible role-user-only"><i class="fas fa-volleyball-ball"></i> Arena</button>
+            <button onclick="showSection('arena-status')" id="btn-arena-status" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold role-admin-accessible"><i class="fas fa-clock"></i> Status Sri Nancy</button>
             <button onclick="showSection('activities')" id="btn-activities" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold role-user-only"><i class="fas fa-calendar-alt text-yellow-500"></i> Program Kelab</button>
             <button onclick="showSection('approval')" id="btn-approval" class="nav-btn flex items-center justify-between px-4 py-2.5 text-xs font-bold role-admin-only">
                 <span><i class="fas fa-check-circle mr-3"></i> Kelulusan</span>
@@ -134,6 +133,13 @@
             
             <!-- Dashboard Section -->
             <section id="dashboard" class="section-content active space-y-6">
+                <!-- LOGO BESAR DASHBOARD -->
+                <div class="glass-card p-6 flex flex-col items-center justify-center bg-gradient-to-r from-slate-900/40 via-blue-950/20 to-slate-900/40 border border-blue-500/20 shadow-[0_0_30px_rgba(59,130,246,0.1)]">
+                    <img src="sdce.png" class="w-36 h-36 object-contain drop-shadow-[0_0_25px_rgba(59,130,246,0.5)] mb-3" alt="SDCE Big Logo">
+                    <h2 class="gaming-font text-lg font-bold text-white tracking-widest">SDCE MASTER HUB</h2>
+                    <p class="text-[10px] text-blue-400 font-semibold tracking-wider uppercase mt-1">Sistem Pengurusan Sukan Elektronik & Arena Bersepadu</p>
+                </div>
+
                 <div class="grid grid-cols-4 gap-4">
                     <div class="glass-card p-5 border-l-4 border-blue-500"><p class="text-[9px] text-slate-500 font-bold uppercase">Total Ahli</p><h3 id="stat-total" class="gaming-font text-2xl">0</h3></div>
                     <div class="glass-card p-5 border-l-4 border-emerald-500"><p class="text-[9px] text-slate-500 font-bold uppercase">Total Dana</p><h3 id="stat-rev" class="gaming-font text-2xl text-emerald-400">RM 0</h3></div>
@@ -172,14 +178,26 @@
             <!-- Status Arena Sri Nancy -->
             <section id="arena-status" class="section-content">
                 <div class="glass-card p-6 min-h-[400px]">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="gaming-font text-sm text-orange-500 uppercase tracking-widest">Status Booking Arena Sri Nancy (Hari Ini Sahaja)</h3>
+                    <div class="flex justify-between items-center mb-4 flex-wrap gap-4">
+                        <h3 class="gaming-font text-sm text-orange-500 uppercase tracking-widest">Status Booking Arena Sri Nancy</h3>
                         <div class="flex gap-4 text-[10px] font-bold">
                             <span class="flex items-center gap-1.5 text-emerald-400"><i class="fas fa-circle text-[8px] animate-pulse"></i> Digunakan</span>
                             <span class="flex items-center gap-1.5 text-orange-400"><i class="fas fa-circle text-[8px]"></i> Menunggu</span>
                             <span class="flex items-center gap-1.5 text-red-500"><i class="fas fa-circle text-[8px]"></i> Tamat</span>
                         </div>
                     </div>
+
+                    <!-- Bar Penapis Carian Khas Untuk User & Admin -->
+                    <div id="arena-search-bar" class="bg-slate-900/60 p-3 rounded-xl border border-white/5 flex gap-3 mb-6 role-user-only role-admin-only hidden">
+                        <div class="flex-1">
+                            <input type="text" id="search-arena-name" placeholder="Cari Nama Penempah / No Bil..." onkeyup="refresh()" class="w-full">
+                        </div>
+                        <div class="w-48">
+                            <input type="date" id="search-arena-date" onchange="refresh()" class="w-full">
+                        </div>
+                        <button onclick="clearArenaSearch()" class="bg-slate-800 hover:bg-slate-700 px-3 rounded-lg text-xs font-bold text-slate-400"><i class="fas fa-undo"></i> Reset</button>
+                    </div>
+
                     <div class="grid grid-cols-1 gap-4" id="sri-nancy-list"></div>
                 </div>
             </section>
@@ -356,6 +374,7 @@
         let curYear = 2026;
         const ADMIN_PASS = "Zam2026";
         const USER_PASS = "User2026"; 
+        const GUEST_PASS = "Guest2026";
         let myChart = null; 
         let currentRole = "guest"; 
         
@@ -424,6 +443,7 @@
             }
 
             document.getElementById('login-page').style.display = 'none';
+            clearArenaSearch();
             refresh();
         }
 
@@ -440,10 +460,27 @@
                 if(currentRole === 'admin') el.classList.remove('hidden');
                 else if(!el.classList.contains('role-user-only')) el.classList.add('hidden'); 
             });
+
+            document.querySelectorAll('.role-guest-accessible').forEach(el => {
+                if(currentRole === 'guest' || currentRole === 'user' || currentRole === 'admin') {
+                    el.classList.remove('hidden');
+                }
+            });
+
+            document.querySelectorAll('.role-admin-accessible').forEach(el => {
+                if(currentRole === 'guest' || currentRole === 'user' || currentRole === 'admin') {
+                    el.classList.remove('hidden');
+                }
+            });
         }
 
         function logout() {
             document.getElementById('login-page').style.display = 'flex';
+        }
+
+        function clearArenaSearch() {
+            if(document.getElementById('search-arena-name')) document.getElementById('search-arena-name').value = '';
+            if(document.getElementById('search-arena-date')) document.getElementById('search-arena-date').value = '';
         }
 
         setInterval(() => {
@@ -490,18 +527,13 @@
         }
 
         function cleanArenaData() {
-            const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kuala_Lumpur' });
-            let originalLength = db.approvedA.length;
-            db.approvedA = db.approvedA.filter(a => a.date === todayStr);
-            
-            if(db.approvedA.length !== originalLength) {
-                localStorage.setItem('SDCE_V19_FINAL', JSON.stringify(db));
-            }
+            // Data tidak lagi dipadam automatik di sini supaya User/Admin boleh membuat carian data arkib.
+            // Pembersihan berkala boleh dilakukan secara manual jika storan penuh.
         }
 
         function showSection(id) {
-            if(currentRole === 'guest' && id !== 'dashboard' && id !== 'arena-status') return;
-            if(currentRole === 'admin' && id !== 'dashboard' && id !== 'approval' && id !== 'list') return;
+            if(currentRole === 'guest' && id !== 'dashboard' && id !== 'arena-status' && id !== 'arena') return;
+            if(currentRole === 'admin' && id !== 'dashboard' && id !== 'approval' && id !== 'list' && id !== 'arena-status') return;
 
             document.querySelectorAll('.section-content, .nav-btn').forEach(e => e.classList.remove('active'));
             document.getElementById(id).classList.add('active');
@@ -583,8 +615,19 @@
             }
         }
 
-        function handleArena(e) {
-            e.preventDefault();
+        function handleArena(event) {
+            event.preventDefault();
+
+            if (currentRole === 'guest') {
+                const confPass = prompt("Sila masukkan Confirmation Password Guest untuk meneruskan tempahan:");
+                if (confPass !== GUEST_PASS) {
+                    alert("Confirmation Password Salah! Tempahan gagal dihantar.");
+                    return;
+                }
+            }
+
+            alert("Sila ambil maklum: Permohonan tempahan anda akan dihantar kepada Admin untuk proses semakan dan kelulusan rasmi.");
+
             db.pendingA.push({ 
                 name: document.getElementById('a-name').value.toUpperCase(), 
                 phone: document.getElementById('a-phone').value,
@@ -593,7 +636,10 @@
                 date: document.getElementById('a-date').value, 
                 time: document.getElementById('a-time').value 
             });
-            save(); e.target.reset(); alert("Booking dihantar untuk kelulusan!");
+            
+            save(); 
+            event.target.reset(); 
+            alert("Booking berjaya dihantar untuk kelulusan Admin!");
         }
 
         function approveMember(i) {
@@ -763,7 +809,6 @@
         function pdfAJK() { alert("Ciri cetak PDF Senarai AJK bakal diintegrasikan."); }
 
         function refresh() {
-            cleanArenaData();
             const yr = db.revenue[2026] || {h:0, i:0, r:0, reg:0, arena:0};
             
             document.getElementById('stat-total').innerText = db.approvedM.length;
@@ -807,19 +852,51 @@
                 </div>
             `).join('');
 
+            // PENGURUSAN PAPARAN DAN CARIAN STATUS ARENA SRI NANCY
             const now = new Date();
             const curHour = now.getHours();
             const todayStr = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Kuala_Lumpur' });
             
-            document.getElementById('sri-nancy-list').innerHTML = db.approvedA.filter(a => a.date === todayStr).map(a => {
+            // Dapatkan nilai input carian (Jika ada)
+            const searchName = document.getElementById('search-arena-name') ? document.getElementById('search-arena-name').value.toUpperCase() : "";
+            const searchDate = document.getElementById('search-arena-date') ? document.getElementById('search-arena-date').value : "";
+
+            let filteredArena = db.approvedA;
+
+            if (currentRole === 'guest') {
+                // Peranan Guest: Sekat tegar untuk paparan HARI INI SAHAJA tanpa carian
+                filteredArena = filteredArena.filter(a => a.date === todayStr);
+            } else {
+                // Peranan User / Admin: Proses carian jika diisi, jika kosong paparkan lalai hari ini
+                if (searchName || searchDate) {
+                    if (searchName) {
+                        filteredArena = filteredArena.filter(a => a.name.includes(searchName) || a.bill.toUpperCase().includes(searchName));
+                    }
+                    if (searchDate) {
+                        filteredArena = filteredArena.filter(a => a.date === searchDate);
+                    }
+                } else {
+                    // Jika tiada kata kunci carian diisi, paparan lalai tetap tarikh hari ini
+                    filteredArena = filteredArena.filter(a => a.date === todayStr);
+                }
+            }
+            
+            document.getElementById('sri-nancy-list').innerHTML = filteredArena.map(a => {
                 const hr = parseInt(a.time);
                 let st = "", badgeStyle = "";
-                if (hr === curHour) { st = "Sedang Digunakan"; badgeStyle = "bg-emerald-500/20 text-emerald-400 border border-emerald-500 pulse-green"; }
-                else if (hr > curHour) { st = "Sedang Menunggu Giliran"; badgeStyle = "bg-orange-500/20 text-orange-400 border border-orange-500"; }
-                else { st = "Masa Sudah Tamat"; badgeStyle = "bg-red-500/20 text-red-500 border border-red-600/40 opacity-60"; }
+                
+                // Indikator status masa (Hanya logik tepat untuk paparan hari ini)
+                if (a.date !== todayStr) {
+                    st = "Selesai Arkib";
+                    badgeStyle = "bg-slate-700/40 text-slate-400 border border-slate-600";
+                } else {
+                    if (hr === curHour) { st = "Sedang Digunakan"; badgeStyle = "bg-emerald-500/20 text-emerald-400 border border-emerald-500 pulse-green"; }
+                    else if (hr > curHour) { st = "Sedang Menunggu Giliran"; badgeStyle = "bg-orange-500/20 text-orange-400 border border-orange-500"; }
+                    else { st = "Masa Sudah Tamat"; badgeStyle = "bg-red-500/20 text-red-500 border border-red-600/40 opacity-60"; }
+                }
 
                 if (currentRole === 'user' || currentRole === 'admin') {
-                    return `<div class="glass-card p-5 border-l-4 ${hr === curHour ? 'border-emerald-500' : (hr > curHour ? 'border-orange-500' : 'border-red-600')}">
+                    return `<div class="glass-card p-5 border-l-4 ${a.date !== todayStr ? 'border-slate-600' : (hr === curHour ? 'border-emerald-500' : (hr > curHour ? 'border-orange-500' : 'border-red-600'))}">
                         <div class="flex justify-between items-start flex-wrap gap-2">
                             <div class="space-y-1">
                                 <p class="text-white font-bold text-sm uppercase tracking-wide">${a.name}</p>
@@ -844,7 +921,7 @@
                         <div class="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider ${badgeStyle}">${st}</div>
                     </div>`;
                 }
-            }).join('') || '<div class="text-center py-10 text-slate-700 italic text-xs">Tiada sebarang rekod tempahan (booking) untuk hari ini.</div>';
+            }).join('') || '<div class="text-center py-10 text-slate-700 italic text-xs">Tiada sebarang rekod tempahan (booking) ditemui untuk padanan carian ini.</div>';
 
             renderApproval();
             
