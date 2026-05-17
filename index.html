@@ -8,10 +8,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght=400;700&family=Plus+Jakarta+Sans:wght=300;400;600;700&display=swap');
         :root { --primary: #3b82f6; --bg-dark: #020617; --glass: rgba(30, 41, 59, 0.7); }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-dark); color: #f1f5f9; overflow: hidden; height: 100vh; }
         .gaming-font { font-family: 'Orbitron', sans-serif; }
@@ -26,11 +27,52 @@
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; }
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        .pulse-green { animation: pulseG 2s infinite; }
+        @keyframes pulseG { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
     </style>
 </head>
 <body class="flex p-4 gap-4">
 
-    <!-- Modal Auth -->
+    <!-- PAGE LOGIN -->
+    <div id="login-page" class="fixed inset-0 bg-slate-950 z-[99999] flex items-center justify-center p-4">
+        <div class="glass-card p-8 w-full max-w-md border-blue-500/30 shadow-2xl text-center">
+            <!-- Saiz Logo diperbesarkan di sini menggunakan w-40 h-40 -->
+            <div class="flex justify-center items-center mb-6">
+                <img src="sdce.png" class="w-40 h-40 object-contain drop-shadow-[0_0_20px_rgba(59,130,246,0.6)]" alt="Logo SDCE">
+            </div>
+            <h2 class="gaming-font text-sm text-blue-500 tracking-widest uppercase mb-1">SDCE MASTER HUB V19</h2>
+            <p class="text-[10px] text-slate-500 uppercase tracking-wider mb-8">Sila Pilih Peranan Log Masuk Anda</p>
+            
+            <div class="space-y-3">
+                <button onclick="selectRole('guest')" class="w-full bg-slate-800 hover:bg-slate-700 py-3 rounded-xl font-bold text-xs flex justify-between items-center px-6 transition-all">
+                    <span><i class="fas fa-user-ghost mr-3 text-slate-400"></i> GUEST</span>
+                    <span class="text-[9px] bg-slate-900 px-2 py-0.5 rounded text-slate-400">Lihat Sahaja</span>
+                </button>
+                <button onclick="openUserPassInput()" class="w-full bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 py-3 rounded-xl font-bold text-xs flex justify-between items-center px-6 transition-all">
+                    <span><i class="fas fa-user mr-3 text-blue-400"></i> USER</span>
+                    <span class="text-[9px] bg-slate-900 px-2 py-0.5 rounded text-blue-400">Akses Penuh</span>
+                </button>
+                <button onclick="openAdminPassInput()" class="w-full bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/30 py-3 rounded-xl font-bold text-xs flex justify-between items-center px-6 transition-all">
+                    <span><i class="fas fa-user-shield mr-3 text-purple-400"></i> ADMIN</span>
+                    <span class="text-[9px] bg-slate-900 px-2 py-0.5 rounded text-purple-400">Kelulusan</span>
+                </button>
+            </div>
+
+            <!-- Input Kata Laluan User -->
+            <div id="user-pass-box" class="hidden mt-6 pt-6 border-t border-white/5">
+                <input type="password" id="login-user-pass" placeholder="MASUKKAN KATA LALUAN USER" class="w-full text-center mb-3 uppercase font-mono tracking-widest">
+                <button onclick="verifyUserLogin()" class="w-full bg-blue-600 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider">Sahkan Akses User</button>
+            </div>
+
+            <!-- Input Kata Laluan Admin -->
+            <div id="admin-pass-box" class="hidden mt-6 pt-6 border-t border-white/5">
+                <input type="password" id="login-admin-pass" placeholder="MASUKKAN KATA LALUAN ADMIN" class="w-full text-center mb-3 uppercase font-mono tracking-widest">
+                <button onclick="verifyAdminLogin()" class="w-full bg-purple-600 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider">Sahkan Akses Admin</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Khas Kelulusan Tindakan Admin Dalam Hub -->
     <div id="auth-modal" class="modal">
         <div class="glass-card p-8 w-80 text-center border-blue-500">
             <i class="fas fa-fingerprint text-4xl text-blue-500 mb-4"></i>
@@ -45,30 +87,44 @@
 
     <!-- Sidebar -->
     <aside class="w-64 glass-card p-6 flex flex-col shrink-0">
-        <div class="text-center mb-6">
-            <img src="sdce.png" class="w-16 mx-auto mb-3">
+        <div class="text-center mb-4">
+            <div class="flex justify-center gap-2 items-center mb-3">
+                <img src="sdce.png" class="w-10" onerror="this.style.display='none'">
+                <img src="logo_kelab.png" class="w-10 h-10 object-contain" onerror="this.style.display='none'">
+            </div>
             <h1 class="gaming-font text-[10px] text-blue-500 tracking-widest uppercase">SDCE Master <span class="text-white">Hub</span></h1>
         </div>
+
+        <!-- Info Peranan Pengguna Semasa -->
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-white/5 text-center mb-4">
+            <p class="text-[8px] text-slate-500 font-bold uppercase tracking-widest">Sesi Semasa</p>
+            <p id="current-role-badge" class="text-[10px] font-black uppercase mt-0.5 tracking-wider text-white">Guest</p>
+        </div>
+
         <nav class="flex-1 space-y-2 overflow-y-auto pr-1">
             <button onclick="showSection('dashboard')" id="btn-dashboard" class="nav-btn active flex items-center gap-3 px-4 py-2.5 text-xs font-bold"><i class="fas fa-chart-line"></i> Dashboard</button>
-            <button onclick="showSection('list')" id="btn-list" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold"><i class="fas fa-users"></i> Ahli Rasmi</button>
-            <button onclick="showSection('reg')" id="btn-reg" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold"><i class="fas fa-id-card"></i> Pendaftaran</button>
-            <button onclick="showSection('arena')" id="btn-arena" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold"><i class="fas fa-volleyball-ball"></i> Arena</button>
+            <button onclick="showSection('list')" id="btn-list" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold role-user-only role-admin-only"><i class="fas fa-users"></i> Ahli Rasmi</button>
+            <button onclick="showSection('reg')" id="btn-reg" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold role-user-only"><i class="fas fa-id-card"></i> Pendaftaran</button>
+            <button onclick="showSection('arena')" id="btn-arena" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold role-user-only"><i class="fas fa-volleyball-ball"></i> Arena</button>
             <button onclick="showSection('arena-status')" id="btn-arena-status" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold"><i class="fas fa-clock"></i> Status Sri Nancy</button>
-            <button onclick="showSection('activities')" id="btn-activities" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold"><i class="fas fa-calendar-alt text-yellow-500"></i> Program Kelab</button>
-            <button onclick="showSection('approval')" id="btn-approval" class="nav-btn flex items-center justify-between px-4 py-2.5 text-xs font-bold">
+            <button onclick="showSection('activities')" id="btn-activities" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold role-user-only"><i class="fas fa-calendar-alt text-yellow-500"></i> Program Kelab</button>
+            <button onclick="showSection('approval')" id="btn-approval" class="nav-btn flex items-center justify-between px-4 py-2.5 text-xs font-bold role-admin-only">
                 <span><i class="fas fa-check-circle mr-3"></i> Kelulusan</span>
                 <span id="badge-count" class="bg-red-500 text-[10px] px-2 rounded-full text-white">0</span>
             </button>
-            <button onclick="showSection('reports')" id="btn-reports" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-emerald-400"><i class="fas fa-file-pdf"></i> Jana Laporan</button>
+            <button onclick="showSection('reports')" id="btn-reports" class="nav-btn flex items-center gap-3 px-4 py-2.5 text-xs font-bold text-emerald-400 role-user-only"><i class="fas fa-file-pdf"></i> Jana Laporan</button>
         </nav>
+
+        <div class="pt-4 border-t border-white/5 mt-2">
+            <button onclick="logout()" class="w-full bg-red-950/40 hover:bg-red-900/30 border border-red-500/20 text-red-400 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wider"><i class="fas fa-sign-out-alt mr-2"></i> Log Keluar Halaman</button>
+        </div>
     </aside>
 
     <!-- Main Content -->
     <main class="flex-1 flex flex-col gap-4 overflow-hidden">
         <header class="glass-card px-8 py-5 flex justify-between items-center">
             <div class="flex items-center gap-4">
-                <img src="logo_kelab.png" class="w-8 h-8 object-contain">
+                <img src="logo_kelab.png" class="w-8 h-8 object-contain" onerror="this.style.display='none'">
                 <h2 id="page-title" class="gaming-font text-[11px] text-blue-500 uppercase tracking-widest">DASHBOARD</h2>
             </div>
             <div id="live-clock" class="text-[11px] font-mono text-blue-400"></div>
@@ -85,12 +141,14 @@
                     <div class="glass-card p-5 border-l-4 border-purple-500"><p class="text-[9px] text-slate-500 font-bold uppercase">Yuran Pendaftaran</p><h3 id="stat-reg" class="gaming-font text-2xl text-purple-400">RM 0</h3></div>
                 </div>
 
+                <!-- Barisan AJK -->
                 <div class="glass-card p-6">
-                    <h3 class="gaming-font text-[10px] text-blue-400 uppercase mb-4 tracking-widest">Barisan Kepimpinan AJK</h3>
-                    <div id="ajk-grid" class="grid grid-cols-4 gap-4"></div>
+                    <h3 class="gaming-font text-base font-bold text-blue-400 uppercase mb-4 tracking-wider">Barisan Kepimpinan AJK Kelab</h3>
+                    <div id="ajk-grid" class="grid grid-cols-4 gap-6"></div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-6 pb-10">
+                <!-- Grid untuk Log, Kenyataan & Carta Pai -->
+                <div class="grid grid-cols-3 gap-6 pb-10">
                     <div class="glass-card h-[350px] flex flex-col">
                         <div class="p-4 border-b border-white/5 text-[10px] font-bold text-orange-400 uppercase">Log Aktiviti & Transaksi</div>
                         <div id="transaction-log" class="p-4 overflow-y-auto flex-1 space-y-2 font-mono text-[9px]"></div>
@@ -98,22 +156,35 @@
                     <div class="glass-card h-[350px] flex flex-col">
                         <div class="p-4 border-b border-white/5 flex justify-between items-center text-[10px] font-bold text-purple-400 uppercase">
                             <span>Kenyataan Rasmi</span>
-                            <button onclick="openAuth(()=>addNews())" class="bg-purple-600 px-2 py-1 rounded text-[8px]">TAMBAH</button>
+                            <button id="add-news-btn" onclick="openAuth(()=>addNews())" class="bg-purple-600 px-2 py-1 rounded text-[8px] role-user-only">TAMBAH</button>
                         </div>
-                        <div id="news-list" class="p-4 overflow-y-auto flex-1"></div>
+                        <div id="news-list" class="p-4 overflow-y-auto flex-1 space-y-2"></div>
+                    </div>
+                    <div class="glass-card h-[350px] flex flex-col items-center justify-center p-4">
+                        <div class="text-[10px] font-bold text-blue-400 uppercase mb-2 w-full text-left">Pecahan Kategori Ahli</div>
+                        <div class="w-full h-full flex items-center justify-center relative">
+                            <canvas id="membershipChart" class="max-h-[240px] max-w-[240px]"></canvas>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Status Arena -->
+            <!-- Status Arena Sri Nancy -->
             <section id="arena-status" class="section-content">
                 <div class="glass-card p-6 min-h-[400px]">
-                    <h3 class="gaming-font text-sm text-orange-500 uppercase tracking-widest mb-6">Status Booking Arena Sri Nancy</h3>
-                    <div class="grid grid-cols-1 gap-3" id="sri-nancy-list"></div>
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="gaming-font text-sm text-orange-500 uppercase tracking-widest">Status Booking Arena Sri Nancy (Hari Ini Sahaja)</h3>
+                        <div class="flex gap-4 text-[10px] font-bold">
+                            <span class="flex items-center gap-1.5 text-emerald-400"><i class="fas fa-circle text-[8px] animate-pulse"></i> Digunakan</span>
+                            <span class="flex items-center gap-1.5 text-orange-400"><i class="fas fa-circle text-[8px]"></i> Menunggu</span>
+                            <span class="flex items-center gap-1.5 text-red-500"><i class="fas fa-circle text-[8px]"></i> Tamat</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 gap-4" id="sri-nancy-list"></div>
                 </div>
             </section>
 
-            <!-- Laporan PDF (NEW) -->
+            <!-- Laporan PDF -->
             <section id="reports" class="section-content">
                 <div class="glass-card p-10 max-w-xl mx-auto border-t-4 border-emerald-500 space-y-6">
                     <h3 class="gaming-font text-sm text-emerald-500 text-center uppercase tracking-widest">Pusat Laporan & PDF</h3>
@@ -135,7 +206,7 @@
                 </div>
             </section>
 
-            <!-- Program/Aktiviti (NEW) -->
+            <!-- Program/Aktiviti -->
             <section id="activities" class="section-content">
                 <div class="glass-card p-6 min-h-screen pb-20">
                     <div class="flex justify-between items-center mb-8">
@@ -154,14 +225,14 @@
                 <div class="glass-card overflow-hidden">
                     <table class="w-full text-left text-xs">
                         <thead class="bg-slate-900 text-slate-500 uppercase font-bold">
-                            <tr><th class="p-4">ID Ahli</th><th class="p-4">Nama / Profil</th><th class="p-4">Kategori</th><th class="p-4">Tindakan</th></tr>
+                            <tr><th class="p-4">ID Ahli</th><th class="p-4">Nama / Profil</th><th class="p-4">Kategori / Esport</th><th class="p-4">Tindakan</th></tr>
                         </thead>
                         <tbody id="member-table" class="divide-y divide-white/5"></tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- Pendaftaran -->
+            <!-- Pendaftaran Ahli -->
             <section id="reg" class="section-content">
                 <div class="glass-card p-10 max-w-2xl mx-auto border-t-4 border-blue-600">
                     <h3 class="gaming-font text-sm text-blue-500 text-center mb-8 uppercase tracking-widest">Borang Keahlian Digital</h3>
@@ -175,14 +246,25 @@
                         </div>
                         <input type="text" id="m-name" placeholder="NAMA PENUH" required class="w-full uppercase font-bold">
                         <div class="grid grid-cols-2 gap-4">
-                            <input type="text" id="m-ic" placeholder="NO IC" required maxlength="12">
-                            <input type="text" id="m-phone" placeholder="NO TELEFON" required>
+                            <input type="text" id="m-ic" placeholder="NO IC (CONTOH: 950102125344)" required maxlength="12">
+                            <input type="text" id="m-phone" placeholder="NO TELEFON (CONTOH: 0123456789)" required>
                         </div>
-                        <select id="m-type" class="w-full">
-                            <option value="Kehormat">AHLI KEHORMAT</option>
-                            <option value="Individu" selected>AHLI INDIVIDU</option>
-                            <option value="Remaja">AHLI REMAJA</option>
-                        </select>
+                        <div class="grid grid-cols-2 gap-4">
+                            <select id="m-type" class="w-full">
+                                <option value="Kehormat">AHLI KEHORMAT</option>
+                                <option value="Individu" selected>AHLI INDIVIDU</option>
+                                <option value="Remaja">AHLI REMAJA (13-30 TAHUN)</option>
+                            </select>
+                            <select id="m-esport" class="w-full" required>
+                                <option value="" disabled selected>PILIH JENIS SUKAN ESPORT</option>
+                                <option value="Mobile Legends">MOBILE LEGENDS (MLBB)</option>
+                                <option value="PUBG Mobile">PUBG MOBILE</option>
+                                <option value="Free Fire">FREE FIRE</option>
+                                <option value="E-Football">E-FOOTBALL</option>
+                                <option value="Valorant">VALORANT</option>
+                                <option value="Lain-lain">LAIN-LAIN</option>
+                            </select>
+                        </div>
                         <button type="submit" class="w-full bg-blue-600 py-3 rounded-xl font-bold uppercase mt-4">Hantar Permohonan</button>
                     </form>
                 </div>
@@ -195,8 +277,13 @@
                     <form onsubmit="handleArena(event)" class="space-y-4">
                         <input type="text" id="a-name" placeholder="NAMA PENYEWA" required class="w-full uppercase">
                         <div class="grid grid-cols-2 gap-4">
-                            <input type="date" id="a-date" required>
-                            <select id="a-time" required>
+                            <input type="text" id="a-phone" placeholder="NO TELEFON" required class="w-full">
+                            <input type="text" id="a-bill" placeholder="NO BIL (AUTO)" readonly class="w-full opacity-60 bg-slate-950">
+                        </div>
+                        <textarea id="a-address" placeholder="ALAMAT PENUH PENYEWA" required class="w-full h-16 text-xs"></textarea>
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="date" id="a-date" required onchange="generateBillNo()">
+                            <select id="a-time" required onchange="generateBillNo()">
                                 <option value="">Pilih Jam</option>
                                 <script>for(let i=8;i<=22;i++)document.write(`<option value="${i}">${i}:00</option>`)</script>
                             </select>
@@ -224,7 +311,7 @@
     <!-- Card ID Modal -->
     <div id="card-modal" class="modal" onclick="this.style.display='none'">
         <div class="w-72 h-[450px] bg-slate-900 border-2 border-blue-600 rounded-[20px] p-6 flex flex-col items-center text-center shadow-2xl relative" onclick="event.stopPropagation()">
-            <img src="sdce.png" class="w-10 mb-2">
+            <img src="sdce.png" class="w-10 mb-2" onerror="this.style.display='none'">
             <div class="w-20 h-20 rounded-full border-2 border-blue-500 overflow-hidden mb-2 bg-slate-800">
                 <img id="card-img" src="" class="w-full h-full object-cover hidden">
                 <i id="card-icon" class="fas fa-user text-3xl mt-5 text-slate-700"></i>
@@ -268,6 +355,9 @@
     <script>
         let curYear = 2026;
         const ADMIN_PASS = "Zam2026";
+        const USER_PASS = "User2026"; 
+        let myChart = null; 
+        let currentRole = "guest"; 
         
         let db = JSON.parse(localStorage.getItem('SDCE_V19_FINAL')) || {
             approvedM: [], pendingM: [], approvedA: [], pendingA: [],
@@ -282,7 +372,94 @@
         const AJK_TITLES = { presiden: "Presiden", t_presiden: "Timbalan Presiden", setiausaha: "Setiausaha", bendahari: "Bendahari" };
         let authTask = null;
 
-        // Image Compression
+        function openUserPassInput() {
+            document.getElementById('admin-pass-box').classList.add('hidden');
+            document.getElementById('user-pass-box').classList.remove('hidden');
+            document.getElementById('login-user-pass').focus();
+        }
+
+        function openAdminPassInput() {
+            document.getElementById('user-pass-box').classList.add('hidden');
+            document.getElementById('admin-pass-box').classList.remove('hidden');
+            document.getElementById('login-admin-pass').focus();
+        }
+
+        function verifyUserLogin() {
+            const pass = document.getElementById('login-user-pass').value;
+            if(pass === USER_PASS) {
+                selectRole('user');
+                document.getElementById('login-user-pass').value = '';
+                document.getElementById('user-pass-box').classList.add('hidden');
+            } else {
+                alert("Kata Laluan User Salah!");
+            }
+        }
+
+        function verifyAdminLogin() {
+            const pass = document.getElementById('login-admin-pass').value;
+            if(pass === ADMIN_PASS) {
+                selectRole('admin');
+                document.getElementById('login-admin-pass').value = '';
+                document.getElementById('admin-pass-box').classList.add('hidden');
+            } else {
+                alert("Kata Laluan Admin Salah!");
+            }
+        }
+
+        function selectRole(role) {
+            currentRole = role;
+            
+            const badge = document.getElementById('current-role-badge');
+            badge.innerText = role;
+            if(role === 'admin') { badge.className = "text-[10px] font-black uppercase mt-0.5 tracking-wider text-purple-400"; }
+            else if(role === 'user') { badge.className = "text-[10px] font-black uppercase mt-0.5 tracking-wider text-blue-400"; }
+            else { badge.className = "text-[10px] font-black uppercase mt-0.5 tracking-wider text-slate-400"; }
+
+            applyRoleRestrictions();
+
+            if(role === 'admin') {
+                showSection('approval');
+            } else {
+                showSection('dashboard');
+            }
+
+            document.getElementById('login-page').style.display = 'none';
+            refresh();
+        }
+
+        function applyRoleRestrictions() {
+            document.querySelectorAll('.role-user-only').forEach(el => {
+                if(currentRole === 'user' || (el.classList.contains('role-admin-only') && currentRole === 'admin')) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+
+            document.querySelectorAll('.role-admin-only').forEach(el => {
+                if(currentRole === 'admin') el.classList.remove('hidden');
+                else if(!el.classList.contains('role-user-only')) el.classList.add('hidden'); 
+            });
+        }
+
+        function logout() {
+            document.getElementById('login-page').style.display = 'flex';
+        }
+
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('live-clock').innerText = now.toLocaleString('ms-MY', { hour12: false });
+        }, 1000);
+
+        function generateBillNo() {
+            const dateInput = document.getElementById('a-date').value;
+            const timeInput = document.getElementById('a-time').value;
+            if(dateInput && timeInput) {
+                const cleanDate = dateInput.replace(/-/g, "");
+                document.getElementById('a-bill').value = "INV" + cleanDate + String(timeInput).padStart(2, '0');
+            }
+        }
+
         async function compressImage(base64Str, maxWidth = 150) {
             return new Promise((resolve) => {
                 const img = new Image();
@@ -312,27 +489,31 @@
             } catch (e) { alert("Memori Penuh! Sila padam data lama."); }
         }
 
-        // Auto-Cleanup Arena (Hilang jika sudah lepas tarikh)
         function cleanArenaData() {
-            const now = new Date();
-            const todayStr = now.toISOString().split('T')[0];
-            const originalCount = db.approvedA.length;
+            const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kuala_Lumpur' });
+            let originalLength = db.approvedA.length;
+            db.approvedA = db.approvedA.filter(a => a.date === todayStr);
             
-            db.approvedA = db.approvedA.filter(a => a.date >= todayStr);
-            
-            if(db.approvedA.length < originalCount) {
-                console.log("Cleanup: Old arena records removed.");
+            if(db.approvedA.length !== originalLength) {
+                localStorage.setItem('SDCE_V19_FINAL', JSON.stringify(db));
             }
         }
 
         function showSection(id) {
+            if(currentRole === 'guest' && id !== 'dashboard' && id !== 'arena-status') return;
+            if(currentRole === 'admin' && id !== 'dashboard' && id !== 'approval' && id !== 'list') return;
+
             document.querySelectorAll('.section-content, .nav-btn').forEach(e => e.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             document.getElementById('btn-'+id).classList.add('active');
             document.getElementById('page-title').innerText = id.replace('-', ' ').toUpperCase();
         }
 
-        function openAuth(task) { authTask = task; document.getElementById('auth-modal').style.display = 'flex'; }
+        function openAuth(task) { 
+            if(currentRole !== 'admin' && currentRole !== 'user') { alert("Tiada kebenaran akses!"); return; }
+            authTask = task; 
+            document.getElementById('auth-modal').style.display = 'flex'; 
+        }
         function closeAuth() { document.getElementById('auth-modal').style.display = 'none'; document.getElementById('auth-pass').value = ''; }
         function verifyAndRun() {
             if(document.getElementById('auth-pass').value === ADMIN_PASS) { if(authTask) authTask(); closeAuth(); }
@@ -351,37 +532,77 @@
             if (file) reader.readAsDataURL(file);
         }
 
-        // Logic Functions
         function handleReg(e) {
             e.preventDefault();
-            db.pendingM.push({
-                name: document.getElementById('m-name').value.toUpperCase(),
-                ic: document.getElementById('m-ic').value,
-                phone: document.getElementById('m-phone').value,
-                photo: document.getElementById('preview-img').src,
-                type: document.getElementById('m-type').value,
-                year: 2026
-            });
-            addLog(`Apply: ${document.getElementById('m-name').value.toUpperCase()}`);
-            save(); e.target.reset(); 
-            document.getElementById('preview-img').classList.add('hidden');
-            document.getElementById('upload-placeholder').classList.remove('hidden');
-            alert("Hantar berjaya!");
+            const name = document.getElementById('m-name').value.toUpperCase();
+            const ic = document.getElementById('m-ic').value.trim();
+            const phone = document.getElementById('m-phone').value.trim();
+            const type = document.getElementById('m-type').value;
+            const esport = document.getElementById('m-esport').value;
+
+            const icRegex = /^\d{12}$/;
+            if (!icRegex.test(ic)) {
+                alert("Ralat: Sila masukkan format NO.IC Malaysia yang betul (12 digit angka sahaja tanpa sempang).");
+                return;
+            }
+
+            const phoneRegex = /^01\d{8,9}$/;
+            if (!phoneRegex.test(phone)) {
+                alert("Ralat: Sila masukkan NO. TELEFON mengikut format rasmi Malaysia (Mula dengan 01 dan mengandungi 10-11 digit).");
+                return;
+            }
+
+            let icYearPrefix = parseInt(ic.substring(0, 2));
+            let birthYear = icYearPrefix > 26 ? 1900 + icYearPrefix : 2000 + icYearPrefix;
+            let age = 2026 - birthYear;
+
+            if (type === "Remaja") {
+                if (age < 13 || age > 30) {
+                    alert(`Pendaftaran Ditolak: Kategori Remaja hanya terbuka untuk umur 13 hingga 30 tahun sahaja.\n\nUmur dikesan dari IC: ${age} Tahun (Tahun Lahir: ${birthYear})`);
+                    return;
+                }
+            }
+
+            const nowStr = new Date().toISOString().split('T')[0].replace(/-/g, "");
+            const randomId = Math.floor(100 + Math.random() * 900);
+            const generatedBill = `REG-${nowStr}-${randomId}`;
+
+            const confirmMsg = `PENGESAHAN PENDAFTARAN AHLI\n\nNo Bil: ${generatedBill}\nNama: ${name}\nKategori: Ahli ${type}\nEsport: ${esport}\nUmur Dikesan: ${age} Tahun\n\nAdakah anda pasti mahu menghantar borang permohonan ini?`;
+            
+            if(confirm(confirmMsg)) {
+                db.pendingM.push({
+                    name: name, ic: ic, phone: phone,
+                    photo: document.getElementById('preview-img').classList.contains('hidden') ? "" : document.getElementById('preview-img').src,
+                    type: type, esport: esport, age: age, bill: generatedBill, year: 2026
+                });
+                addLog(`Apply: ${name} (${generatedBill})`);
+                save(); e.target.reset(); 
+                document.getElementById('preview-img').classList.add('hidden');
+                document.getElementById('upload-placeholder').classList.remove('hidden');
+                alert(`Permohonan berjaya dihantar!\nNo Bil Anda: ${generatedBill}`);
+            }
         }
 
         function handleArena(e) {
             e.preventDefault();
-            db.pendingA.push({ name: document.getElementById('a-name').value.toUpperCase(), date: document.getElementById('a-date').value, time: document.getElementById('a-time').value });
-            save(); e.target.reset(); alert("Booking dihantar!");
+            db.pendingA.push({ 
+                name: document.getElementById('a-name').value.toUpperCase(), 
+                phone: document.getElementById('a-phone').value,
+                bill: document.getElementById('a-bill').value || "INV-GEN",
+                address: document.getElementById('a-address').value.toUpperCase(),
+                date: document.getElementById('a-date').value, 
+                time: document.getElementById('a-time').value 
+            });
+            save(); e.target.reset(); alert("Booking dihantar untuk kelulusan!");
         }
 
         function approveMember(i) {
             const m = db.pendingM[i];
+            if(!confirm(`TINDAKAN KELULUSAN KEAHLIAN\n\nSahkan kelulusan untuk ${m.name}?`)) return;
             db.lastIdNum++;
             m.staffId = "SDCE-" + String(db.lastIdNum).padStart(3, '0');
             const key = m.type === 'Kehormat' ? 'h' : (m.type === 'Individu' ? 'i' : 'r');
             const fee = m.type === 'Kehormat' ? 60 : (m.type === 'Individu' ? 48 : 36);
-            
             db.revenue[2026].reg += 5;
             db.revenue[2026][key] += fee;
             db.approvedM.push(m);
@@ -390,50 +611,160 @@
             save();
         }
 
-        function approveArena(i) {
-            db.revenue[2026].arena += 5;
-            db.approvedA.push(db.pendingA[i]);
-            db.pendingA.splice(i, 1);
-            addLog(`Lulus Arena`, 'plus');
-            save();
-        }
-
-        function rejectItem(type, i) {
-            type === 'M' ? db.pendingM.splice(i,1) : db.pendingA.splice(i,1);
-            addLog(`Rejected Item`, 'minus');
-            save();
-        }
-
-        function addActivity() {
-            document.getElementById('act-modal').style.display = 'flex';
-        }
-
-        async function saveActivity() {
-            const title = document.getElementById('act-title').value;
-            const desc = document.getElementById('act-desc').value;
-            const img = document.getElementById('act-preview').src;
-            const status = document.getElementById('act-status').value;
-
-            if(!title) return alert("Sila isi tajuk!");
-            
-            db.activities.unshift({ title, desc, img, status, date: new Date().toLocaleDateString() });
-            document.getElementById('act-modal').style.display = 'none';
-            addLog(`Program Baru: ${title}`);
-            save();
-        }
-
-        function deleteActivity(i) {
-            if(confirm("Padam aktiviti ini?")) {
-                db.activities.splice(i, 1);
+        function openArenaApprovalMenu(i, action) {
+            const a = db.pendingA[i];
+            const msg = `TINDAKAN KELULUSAN ARENA\n\nNo Bil: ${a.bill}\nNama: ${a.name}\nTarikh/Masa: ${a.date} (${a.time}:00)\n\nAdakah anda pasti mahu [${action.toUpperCase()}] permohonan ini?`;
+            if(confirm(msg)) {
+                if(action === 'approve') {
+                    db.revenue[2026].arena += 5;
+                    db.approvedA.push(a); 
+                    addLog(`Lulus Arena: ${a.bill}`, 'plus');
+                } else {
+                    addLog(`Tolak Arena: ${a.bill}`, 'minus');
+                }
+                db.pendingA.splice(i, 1);
                 save();
             }
         }
 
-        // Rendering
+        function rejectMember(i) {
+            if(confirm("Tolak permohonan keahlian ini?")) {
+                db.pendingM.splice(i, 1);
+                addLog(`Rejected Member`, 'minus');
+                save();
+            }
+        }
+
+        function addActivity() { document.getElementById('act-modal').style.display = 'flex'; }
+
+        async function saveActivity() {
+            const title = document.getElementById('act-title').value;
+            const desc = document.getElementById('act-desc').value;
+            const img = document.getElementById('act-preview').classList.contains('hidden') ? "" : document.getElementById('act-preview').src;
+            const status = document.getElementById('act-status').value;
+
+            if(!title) return alert("Sila isi tajuk!");
+            db.activities.unshift({ title, desc, img, status, date: new Date().toLocaleDateString() });
+            document.getElementById('act-modal').style.display = 'none';
+            addLog(`Program Baru: ${title}`);
+            save();
+            document.getElementById('act-title').value = '';
+            document.getElementById('act-desc').value = '';
+            document.getElementById('act-preview').classList.add('hidden');
+            document.getElementById('act-ph').classList.remove('hidden');
+        }
+
+        function deleteActivity(i) { if(confirm("Padam aktiviti ini?")) { db.activities.splice(i, 1); save(); } }
+
+        function addNews() {
+            const title = prompt("Masukkan Tajuk Kenyataan:"); if(!title) return;
+            const body = prompt("Masukkan Kandungan Kenyataan:"); if(!body) return;
+            db.news.unshift({ title, body, date: new Date().toLocaleDateString() });
+            addLog(`Kenyataan Baru: ${title}`);
+            save();
+        }
+
+        function assignAJK(idx, role) {
+            if(!role) return;
+            if(!db.ajk[2026]) db.ajk[2026] = {};
+            const member = db.approvedM[idx];
+            
+            const konfirmasi = confirm(`PENGESAHAN PERLANTIKAN AJK\n\nAdakah anda pasti mahu melantik ${member.name} sebagai ${AJK_TITLES[role]}?`);
+            if(!konfirmasi) return;
+
+            db.ajk[2026][role] = { name: member.name, photo: member.photo || "" };
+            addLog(`Lantik AJK: ${role.toUpperCase()}`);
+            save();
+        }
+
+        function removeAJK(role) {
+            const konfirmasi = confirm(`PENGESAHAN KOSONGKAN JAWATAN\n\nAdakah anda pasti mahu mengosongkan jawatan ${AJK_TITLES[role]}?`);
+            if(!konfirmasi) return;
+
+            if(db.ajk[2026] && db.ajk[2026][role]) {
+                delete db.ajk[2026][role];
+                addLog(`Buang AJK: ${role.toUpperCase()}`);
+                save();
+            }
+        }
+
+        function updateMembershipChart() {
+            let kehormat = db.approvedM.filter(m => m.type === 'Kehormat').length;
+            let individu = db.approvedM.filter(m => m.type === 'Individu').length;
+            let remaja = db.approvedM.filter(m => m.type === 'Remaja').length;
+
+            const ctx = document.getElementById('membershipChart').getContext('2d');
+            if(myChart) { myChart.destroy(); }
+
+            myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Kehormat', 'Individu', 'Remaja'],
+                    datasets: [{
+                        data: [kehormat, individu, remaja],
+                        backgroundColor: ['#3b82f6', '#10b981', '#a855f7'],
+                        borderWidth: 1, borderColor: '#1e293b'
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#94a3b8', font: { size: 9 } }, position: 'bottom' } }
+                }
+            });
+        }
+
+        function viewCard(idx) {
+            const m = db.approvedM[idx];
+            document.getElementById('card-name').innerText = m.name;
+            document.getElementById('card-id-text').innerText = m.staffId;
+            document.getElementById('card-type').innerText = m.type + " - " + m.phone;
+            document.getElementById('card-rank').innerText = m.type === 'Kehormat' ? 'AHLI KEHORMAT' : (m.type === 'Individu' ? 'AHLI INDIVIDU' : 'AHLI REMAJA');
+            const img = document.getElementById('card-img');
+            const icon = document.getElementById('card-icon');
+            if(m.photo) { img.src = m.photo; img.classList.remove('hidden'); icon.classList.add('hidden'); } 
+            else { img.classList.add('hidden'); icon.classList.remove('hidden'); }
+            document.getElementById('qrcode').innerHTML = "";
+            new QRCode(document.getElementById('qrcode'), { text: m.staffId, width: 80, height: 80 });
+            document.getElementById('card-modal').style.display = 'flex';
+        }
+
+        function renderApproval() {
+            document.getElementById('p-m-list').innerHTML = db.pendingM.map((m, i) => `
+                <div class="p-4 flex justify-between items-center text-xs">
+                    <div>
+                        <p class="text-white font-bold uppercase">${m.name} (${m.type})</p>
+                        <p class="text-[10px] text-blue-400 font-semibold">Esport: ${m.esport || 'Tiada'} | Umur: ${m.age || 'N/A'} Tahun</p>
+                        <p class="text-[10px] text-purple-400 font-mono">No Bil: ${m.bill || 'N/A'}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="openAuth(()=>approveMember(${i}))" class="bg-emerald-600 px-3 py-1 rounded font-bold text-[10px]">LULUS</button>
+                        <button onclick="openAuth(()=>rejectMember(${i}))" class="bg-red-600 px-3 py-1 rounded font-bold text-[10px]">TOLAK</button>
+                    </div>
+                </div>
+            `).join('') || '<div class="p-4 text-center text-slate-600 italic text-xs">Tiada permohonan keahlian pending.</div>';
+
+            document.getElementById('p-a-list').innerHTML = db.pendingA.map((a, i) => `
+                <div class="p-4 flex justify-between items-center text-xs">
+                    <div>
+                        <p class="text-white font-bold uppercase">${a.name} (${a.phone})</p>
+                        <p class="text-[10px] text-orange-400 font-mono">Bil: ${a.bill}</p>
+                        <p class="text-[10px] text-slate-500">Masa: ${a.date} | Jam: ${a.time}:00</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="openAuth(()=>openArenaApprovalMenu(${i}, 'approve'))" class="bg-emerald-600 px-3 py-1 rounded font-bold text-[10px]">LULUS</button>
+                        <button onclick="openAuth(()=>openArenaApprovalMenu(${i}, 'reject'))" class="bg-red-600 px-3 py-1 rounded font-bold text-[10px]">TOLAK</button>
+                    </div>
+                </div>
+            `).join('') || '<div class="p-4 text-center text-slate-600 italic text-xs">Tiada permohonan arena pending.</div>';
+        }
+
+        function pdfAhli() { alert("Ciri cetak PDF Ahli bakal diintegrasikan."); }
+        function pdfKutipan() { alert("Ciri cetak PDF Kutipan Dana bakal diintegrasikan."); }
+        function pdfAJK() { alert("Ciri cetak PDF Senarai AJK bakal diintegrasikan."); }
+
         function refresh() {
             cleanArenaData();
-            const yr = db.revenue[2026];
-            const sq = document.getElementById('search-m').value.toUpperCase();
+            const yr = db.revenue[2026] || {h:0, i:0, r:0, reg:0, arena:0};
             
             document.getElementById('stat-total').innerText = db.approvedM.length;
             document.getElementById('stat-rev').innerText = `RM ${yr.h + yr.i + yr.r + yr.reg + yr.arena}`;
@@ -441,26 +772,30 @@
             document.getElementById('stat-reg').innerText = `RM ${yr.reg}`;
             document.getElementById('badge-count').innerText = db.pendingM.length + db.pendingA.length;
 
-            // Logs
+            updateMembershipChart();
+
             document.getElementById('transaction-log').innerHTML = db.logs.map(l => `<div><span class="text-slate-500">[${l.time}]</span> ${l.msg}</div>`).join('');
 
-            // AJK
             const currentAJK = db.ajk[2026] || {};
             document.getElementById('ajk-grid').innerHTML = Object.entries(AJK_TITLES).map(([key, title]) => {
                 const h = currentAJK[key];
-                return `<div class="bg-white/5 border border-white/10 p-4 rounded-xl text-center group relative">
-                    <p class="text-[7px] text-blue-400 font-bold uppercase mb-2">${title}</p>
-                    ${h ? `<div class="w-8 h-8 rounded-full mx-auto overflow-hidden border border-blue-500 mb-1"><img src="${h.photo}" class="w-full h-full object-cover"></div><p class="text-[8px] font-bold uppercase truncate">${h.name}</p>
-                    <button onclick="openAuth(()=>removeAJK('${key}'))" class="absolute inset-0 bg-red-900/80 opacity-0 group-hover:opacity-100 flex items-center justify-center text-[7px] font-bold">REMOVE</button>` : `<p class="text-[8px] text-slate-700 italic">KOSONG</p>`}
+                return `<div class="bg-gradient-to-b from-slate-800 to-slate-900 border border-white/10 p-6 rounded-2xl text-center group relative shadow-lg">
+                    <p class="text-[10px] text-blue-400 font-extrabold uppercase mb-3 tracking-widest">${title}</p>
+                    ${h ? `
+                        <div class="w-16 h-16 rounded-full mx-auto overflow-hidden border-2 border-blue-500 mb-3 shadow-md bg-slate-950">
+                            ${h.photo ? `<img src="${h.photo}" class="w-full h-full object-cover">` : `<i class="fas fa-user text-2xl pt-3 text-slate-700"></i>`}
+                        </div>
+                        <p class="text-xs font-bold text-white uppercase truncate">${h.name}</p>
+                        <button onclick="openAuth(()=>removeAJK('${key}'))" class="absolute inset-0 bg-red-950/90 opacity-0 group-hover:opacity-100 flex items-center justify-center text-xs font-bold rounded-2xl transition-all duration-200 role-user-only role-admin-only">KOSONGKAN JAWATAN</button>
+                    ` : `<div class="w-16 h-16 rounded-full mx-auto border-2 border-dashed border-slate-700 flex items-center justify-center mb-3"><i class="fas fa-user-plus text-slate-700"></i></div><p class="text-xs text-slate-600 italic font-medium">KOSONG</p>`}
                 </div>`;
             }).join('');
 
-            // Activities
             document.getElementById('activity-grid').innerHTML = db.activities.map((a, i) => `
                 <div class="glass-card overflow-hidden flex flex-col relative group">
-                    <button onclick="openAuth(()=>deleteActivity(${i}))" class="absolute top-2 right-2 bg-red-600 w-6 h-6 rounded-full text-[10px] opacity-0 group-hover:opacity-100 z-10"><i class="fas fa-trash"></i></button>
-                    <div class="h-32 bg-slate-800 overflow-hidden">
-                        <img src="${a.img}" class="w-full h-full object-cover">
+                    <button onclick="openAuth(()=>deleteActivity(${i}))" class="absolute top-2 right-2 bg-red-600 w-6 h-6 rounded-full text-[10px] opacity-0 group-hover:opacity-100 z-10 role-user-only"><i class="fas fa-trash"></i></button>
+                    <div class="h-32 bg-slate-800 overflow-hidden flex items-center justify-center">
+                        ${a.img ? `<img src="${a.img}" class="w-full h-full object-cover">` : `<i class="fas fa-calendar-alt text-2xl text-slate-600"></i>`}
                     </div>
                     <div class="p-4">
                         <div class="flex justify-between items-start mb-2">
@@ -468,153 +803,93 @@
                             <span class="text-[7px] ${a.status === 'Semasa' ? 'bg-emerald-600' : 'bg-blue-600'} px-2 py-0.5 rounded text-white font-bold">${a.status}</span>
                         </div>
                         <p class="text-[9px] text-slate-400 leading-relaxed mb-2">${a.desc}</p>
-                        <p class="text-[7px] text-slate-600 font-mono italic">${a.date}</p>
                     </div>
                 </div>
             `).join('');
 
-            // Arena Status
             const now = new Date();
             const curHour = now.getHours();
-            const todayStr = now.toISOString().split('T')[0];
+            const todayStr = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Kuala_Lumpur' });
             
             document.getElementById('sri-nancy-list').innerHTML = db.approvedA.filter(a => a.date === todayStr).map(a => {
                 const hr = parseInt(a.time);
-                let st = "Tunggu Giliran", col = "border-slate-700";
-                if(hr === curHour) { st = "AKTIF"; col = "border-emerald-500 bg-emerald-500/10"; }
-                else if(hr < curHour) { st = "MASA TAMAT"; col = "border-blue-500 text-blue-400"; }
-                return `<div class="glass-card p-4 flex justify-between items-center border-l-4 ${col}">
-                    <div><p class="text-white font-bold text-xs uppercase">${a.name}</p><p class="text-[10px] text-slate-500">${a.time}:00 - ${hr+1}:00</p></div>
-                    <div class="text-[9px] font-black tracking-widest">${st}</div>
-                </div>`;
-            }).join('') || '<div class="text-center py-10 text-slate-700 italic text-xs">Tiada rekod booking hari ini.</div>';
+                let st = "", badgeStyle = "";
+                if (hr === curHour) { st = "Sedang Digunakan"; badgeStyle = "bg-emerald-500/20 text-emerald-400 border border-emerald-500 pulse-green"; }
+                else if (hr > curHour) { st = "Sedang Menunggu Giliran"; badgeStyle = "bg-orange-500/20 text-orange-400 border border-orange-500"; }
+                else { st = "Masa Sudah Tamat"; badgeStyle = "bg-red-500/20 text-red-500 border border-red-600/40 opacity-60"; }
+
+                if (currentRole === 'user' || currentRole === 'admin') {
+                    return `<div class="glass-card p-5 border-l-4 ${hr === curHour ? 'border-emerald-500' : (hr > curHour ? 'border-orange-500' : 'border-red-600')}">
+                        <div class="flex justify-between items-start flex-wrap gap-2">
+                            <div class="space-y-1">
+                                <p class="text-white font-bold text-sm uppercase tracking-wide">${a.name}</p>
+                                <div class="grid grid-cols-2 gap-x-6 gap-y-1 text-[11px] text-slate-400 font-medium">
+                                    <p><span class="text-slate-500 font-bold">No. Telefon:</span> ${a.phone}</p>
+                                    <p><span class="text-slate-500 font-bold">No. Bil:</span> <span class="font-mono text-blue-400">${a.bill}</span></p>
+                                    <p class="col-span-2"><span class="text-slate-500 font-bold">Alamat:</span> ${a.address || 'TIADA ALAMAT'}</p>
+                                </div>
+                                <p class="text-[11px] text-slate-300 flex items-center gap-2 pt-1 font-semibold">
+                                    <i class="fas fa-calendar-day text-blue-500"></i> Tarikh: ${a.date} | <i class="fas fa-clock text-orange-500"></i> Slot Masa: ${a.time}:00 - ${hr+1}:00
+                                </p>
+                            </div>
+                            <div class="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider ${badgeStyle}">${st}</div>
+                        </div>
+                    </div>`;
+                } else {
+                    return `<div class="glass-card p-4 flex justify-between items-center border-l-4 ${hr === curHour ? 'border-emerald-500' : (hr > curHour ? 'border-orange-500' : 'border-red-600')}">
+                        <div>
+                            <p class="text-white font-bold text-sm uppercase">${a.name}</p>
+                            <p class="text-[11px] text-slate-500 flex items-center gap-2 mt-0.5"><i class="fas fa-clock text-[10px]"></i> Slot Masa: ${a.time}:00 - ${hr+1}:00</p>
+                        </div>
+                        <div class="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider ${badgeStyle}">${st}</div>
+                    </div>`;
+                }
+            }).join('') || '<div class="text-center py-10 text-slate-700 italic text-xs">Tiada sebarang rekod tempahan (booking) untuk hari ini.</div>';
 
             renderApproval();
             
-            // Member Table
-            const filtered = db.approvedM.filter(m => m.name.includes(sq) || m.ic.includes(sq) || m.staffId.includes(sq));
-            document.getElementById('member-table').innerHTML = filtered.map((m) => {
-                const idx = db.approvedM.indexOf(m);
-                return `<tr class="hover:bg-white/5">
-                    <td class="p-4 font-mono text-blue-400 font-bold">${m.staffId}</td>
-                    <td class="p-4 flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full overflow-hidden border border-blue-500">${m.photo ? `<img src="${m.photo}" class="w-full h-full object-cover">` : `<i class="fas fa-user text-xs mt-2 ml-2"></i>`}</div>
-                        <span class="font-bold text-white uppercase">${m.name}</span>
-                    </td>
-                    <td class="p-4 text-slate-500 text-[10px]">${m.type}</td>
-                    <td class="p-4 flex gap-2">
-                        <button onclick="viewCard(${idx})" class="bg-blue-600/20 text-blue-400 px-2 py-1 rounded text-[9px] font-bold">KAD</button>
-                        <select onchange="assignAJK(${idx}, this.value)" class="!p-1 !text-[8px] !h-6">
-                            <option value="">Lantik AJK...</option>
-                            ${Object.entries(AJK_TITLES).map(([k,v]) => `<option value="${k}">${v}</option>`).join('')}
-                        </select>
-                        <button onclick="openAuth(()=>db.approvedM.splice(${idx},1) & save())" class="text-red-500 px-2"><i class="fas fa-trash-alt"></i></button>
-                    </td>
-                </tr>`;
-            }).join('');
+            if(document.getElementById('search-m')) {
+                const sq = document.getElementById('search-m').value.toUpperCase();
+                const filtered = db.approvedM.filter(m => m.name.includes(sq) || m.ic.includes(sq) || m.staffId.includes(sq));
+                document.getElementById('member-table').innerHTML = filtered.map((m) => {
+                    const idx = db.approvedM.indexOf(m);
+                    return `<tr class="hover:bg-white/5">
+                        <td class="p-4 font-mono text-blue-400 font-bold">${m.staffId}</td>
+                        <td class="p-4 flex items-center gap-3">
+                            <span class="font-bold text-white uppercase block">${m.name}</span>
+                        </td>
+                        <td class="p-4">${m.type}</td>
+                        <td class="p-4 flex gap-2 items-center">
+                            <button onclick="viewCard(${idx})" class="bg-blue-600/20 text-blue-400 px-2 py-1 rounded text-[9px] font-bold">KAD</button>
+                            
+                            <select onchange="assignAJK(${idx}, this.value); this.value='';" class="bg-slate-900 border border-slate-700 text-white rounded text-[9px] p-1 uppercase font-bold role-user-only role-admin-only">
+                                <option value="">+ LANTIK AJK</option>
+                                <option value="presiden">PRESIDEN</option>
+                                <option value="t_presiden">TIMB. PRESIDEN</option>
+                                <option value="setiausaha">SETIAUSAHA</option>
+                                <option value="bendahari">BENDAHARI</option>
+                            </select>
 
-            document.getElementById('news-list').innerHTML = db.news.map(n => `<div class="bg-white/5 p-3 rounded-lg mb-2"><p class="text-purple-400 text-[9px] font-bold uppercase">${n.title}</p><p class="text-[9px] text-slate-400">${n.body}</p></div>`).join('');
-        }
-
-        function renderApproval() {
-            document.getElementById('p-m-list').innerHTML = db.pendingM.map((m, i) => `
-                <div class="p-3 flex justify-between items-center hover:bg-white/5">
-                    <div class="text-[9px] uppercase font-bold">${m.name}<br><span class="text-slate-500">${m.type}</span></div>
-                    <div class="flex gap-2">
-                        <button onclick="openAuth(()=>approveMember(${i}))" class="bg-blue-600 px-3 py-1 rounded text-[8px] font-bold">LULUS</button>
-                        <button onclick="openAuth(()=>rejectItem('M', ${i}))" class="bg-red-600 px-3 py-1 rounded text-[8px] font-bold">REJECT</button>
-                    </div>
-                </div>`).join('');
-
-            document.getElementById('p-a-list').innerHTML = db.pendingA.map((a, i) => `
-                <div class="p-3 flex justify-between items-center hover:bg-white/5">
-                    <div class="text-[9px] uppercase font-bold text-orange-400">${a.name}<br><span class="text-slate-500">${a.date} | ${a.time}:00</span></div>
-                    <div class="flex gap-2">
-                        <button onclick="openAuth(()=>approveArena(${i}))" class="bg-orange-600 px-3 py-1 rounded text-[8px] font-bold">LULUS</button>
-                        <button onclick="openAuth(()=>rejectItem('A', ${i}))" class="bg-red-600 px-3 py-1 rounded text-[8px] font-bold">REJECT</button>
-                    </div>
-                </div>`).join('');
-        }
-
-        function assignAJK(mIdx, pos) {
-            if(!pos) return;
-            openAuth(() => {
-                const m = db.approvedM[mIdx];
-                db.ajk[2026][pos] = { name: m.name, photo: m.photo, ic: m.ic };
-                addLog(`Lantik AJK: ${AJK_TITLES[pos]}`, 'info');
-                save();
-            });
-        }
-        function removeAJK(pos) { db.ajk[2026][pos] = null; save(); }
-
-        function viewCard(idx) {
-            const m = db.approvedM[idx];
-            document.getElementById('card-name').innerText = m.name;
-            document.getElementById('card-id-text').innerText = m.staffId;
-            document.getElementById('card-type').innerText = m.type + " MEMBERSHIP";
-            
-            let rank = "AHLI BIASA";
-            const currentAJK = db.ajk[2026] || {};
-            for(let [k, v] of Object.entries(currentAJK)) {
-                if(v && v.ic === m.ic) { rank = AJK_TITLES[k]; break; }
+                            <button onclick="openAuth(()=> { db.approvedM.splice(${idx},1); save(); })" class="text-red-500 px-2"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>`;
+                }).join('');
             }
-            document.getElementById('card-rank').innerText = rank;
 
-            const img = document.getElementById('card-img');
-            const icon = document.getElementById('card-icon');
-            if(m.photo) { img.src = m.photo; img.classList.remove('hidden'); icon.classList.add('hidden'); }
-            else { img.classList.add('hidden'); icon.classList.remove('hidden'); }
+            document.getElementById('news-list').innerHTML = db.news.map(n => `
+                <div class="bg-white/5 p-3 rounded-lg">
+                    <div class="flex justify-between items-center mb-1">
+                        <h5 class="text-white font-bold text-[10px] uppercase">${n.title}</h5>
+                        <span class="text-[8px] text-slate-500">${n.date}</span>
+                    </div>
+                    <p class="text-[9px] text-slate-400 leading-normal">${n.body}</p>
+                </div>
+            `).join('');
             
-            const q = document.getElementById('qrcode'); q.innerHTML = ""; 
-            new QRCode(q, { text: `SDCE_ID:${m.staffId}`, width: 60, height: 60 });
-            document.getElementById('card-modal').style.display='flex';
+            applyRoleRestrictions();
         }
 
-        // PDF Generation
-        const { jsPDF } = window.jspdf;
-
-        function pdfAhli() {
-            const year = document.getElementById('report-year').value;
-            const doc = new jsPDF();
-            doc.setFontSize(16); doc.text(`SENARAI AHLI RASMI SDCE TAHUN ${year}`, 14, 20);
-            const data = db.approvedM.map(m => [m.staffId, m.name, m.ic, m.type]);
-            doc.autoTable({ head: [['ID', 'Nama', 'IC', 'Kategori']], body: data, startY: 30 });
-            doc.save(`Senarai_Ahli_${year}.pdf`);
-        }
-
-        function pdfKutipan() {
-            const year = document.getElementById('report-year').value;
-            const yr = db.revenue[year] || {h:0, i:0, r:0, reg:0, arena:0};
-            const doc = new jsPDF();
-            doc.setFontSize(16); doc.text(`LAPORAN KUTIPAN DANA SDCE ${year}`, 14, 20);
-            const data = [
-                ['Yuran Ahli Kehormat', `RM ${yr.h}`],
-                ['Yuran Ahli Individu', `RM ${yr.i}`],
-                ['Yuran Ahli Remaja', `RM ${yr.r}`],
-                ['Pendaftaran Ahli Baru', `RM ${yr.reg}`],
-                ['Tempahan Arena', `RM ${yr.arena}`],
-                ['JUMLAH KESELURUHAN', `RM ${yr.h+yr.i+yr.r+yr.reg+yr.arena}`]
-            ];
-            doc.autoTable({ head: [['Kategori', 'Jumlah']], body: data, startY: 30 });
-            doc.save(`Kutipan_Dana_${year}.pdf`);
-        }
-
-        function pdfAJK() {
-            const year = document.getElementById('report-year').value;
-            const doc = new jsPDF();
-            doc.setFontSize(16); doc.text(`BARISAN AJK KELAB SDCE ${year}`, 14, 20);
-            const ajkList = db.ajk[year] || {};
-            const data = Object.entries(AJK_TITLES).map(([k,v]) => [v, ajkList[k] ? ajkList[k].name : "KOSONG"]);
-            doc.autoTable({ head: [['Jawatan', 'Nama Pemegang']], body: data, startY: 30 });
-            doc.save(`Barisan_AJK_${year}.pdf`);
-        }
-
-        setInterval(() => { 
-            document.getElementById('live-clock').innerText = new Date().toLocaleString(); 
-            renderSriNancy();
-        }, 30000);
-
-        refresh();
+        window.onload = () => { refresh(); };
     </script>
 </body>
 </html>
