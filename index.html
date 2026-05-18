@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght=300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
         :root { --primary: #3b82f6; --bg-dark: #020617; --glass: rgba(30, 41, 59, 0.7); }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-dark); color: #f1f5f9; overflow: hidden; height: 100vh; }
         .gaming-font { font-family: 'Orbitron', sans-serif; }
@@ -193,25 +193,35 @@
             <section id="arena-status" class="section-content">
                 <div class="glass-card p-6 min-h-[400px]">
                     <div class="flex justify-between items-center mb-4 flex-wrap gap-4">
-                        <h3 class="gaming-font text-sm text-orange-500 uppercase tracking-widest">Status Booking Arena Sri Nancy</h3>
+                        <h3 class="gaming-font text-sm text-orange-500 uppercase tracking-widest">Jadual & Ketersediaan Arena Sri Nancy (8 AM - 5 PM)</h3>
                         <div class="flex gap-4 text-[10px] font-bold">
-                            <span class="flex items-center gap-1.5 text-emerald-400"><i class="fas fa-circle text-[8px] animate-pulse"></i> Digunakan</span>
-                            <span class="flex items-center gap-1.5 text-orange-400"><i class="fas fa-circle text-[8px]"></i> Menunggu</span>
-                            <span class="flex items-center gap-1.5 text-red-500"><i class="fas fa-circle text-[8px]"></i> Tamat</span>
+                            <span class="flex items-center gap-1.5 text-emerald-400"><i class="fas fa-circle text-[8px]"></i> Kosong (Available)</span>
+                            <span class="flex items-center gap-1.5 text-red-500"><i class="fas fa-circle text-[8px]"></i> Ditempah (Booked)</span>
                         </div>
                     </div>
 
-                    <div id="arena-search-bar" class="bg-slate-900/60 p-3 rounded-xl border border-white/5 flex gap-3 mb-6 role-guest-accessible">
-                        <div class="flex-1">
-                            <input type="text" id="search-arena-name" placeholder="Cari Nama Penempah / No Bil..." onkeyup="refresh()" class="w-full">
+                    <div id="arena-search-bar" class="bg-slate-900/60 p-3 rounded-xl border border-white/5 flex gap-3 mb-6">
+                        <div class="flex-1 flex items-center gap-2">
+                            <span class="text-xs text-slate-400 font-bold uppercase">PILIH TARIKH SEMAKAN JADUAL:</span>
+                            <input type="date" id="search-arena-date" onchange="refresh()" class="w-48">
                         </div>
-                        <div class="w-48">
-                            <input type="date" id="search-arena-date" onchange="refresh()" class="w-full">
-                        </div>
-                        <button onclick="clearArenaSearch()" class="bg-slate-800 hover:bg-slate-700 px-3 rounded-lg text-xs font-bold text-slate-400"><i class="fas fa-undo"></i> Reset</button>
+                        <button onclick="clearArenaSearch()" class="bg-slate-800 hover:bg-slate-700 px-3 rounded-lg text-xs font-bold text-slate-400"><i class="fas fa-undo"></i> Reset Hari Ini</button>
                     </div>
 
-                    <div class="grid grid-cols-1 gap-4" id="sri-nancy-list"></div>
+                    <div class="glass-card overflow-hidden">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-900 text-slate-400 uppercase font-bold font-mono">
+                                <tr>
+                                    <th class="p-4 w-32 text-orange-400">Slot Masa</th>
+                                    <th class="p-4 w-40">Status Slot</th>
+                                    <th class="p-4">Maklumat Penyewa / Tempahan</th>
+                                    <th class="p-4 w-28 text-center">Tindakan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sri-nancy-timetable" class="divide-y divide-white/5 font-medium">
+                                </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 
@@ -404,14 +414,14 @@
                                 <label class="text-[9px] text-slate-500 block mb-1">JAM MULA</label>
                                 <select id="a-time" required class="w-full" onchange="generateBillNo()">
                                     <option value="">Pilih Jam</option>
-                                    <script>for(let i=8;i<=21;i++)document.write(`<option value="${i}">${i}:00</option>`)</script>
+                                    <script>for(let i=8;i<=16;i++)document.write(`<option value="${i}">${i}:00</option>`)</script>
                                 </select>
                             </div>
                             <div>
                                 <label class="text-[9px] text-slate-500 block mb-1">JAM TAMAT</label>
                                 <select id="a-time-end" required class="w-full" onchange="generateBillNo()">
                                     <option value="">Pilih Jam</option>
-                                    <script>for(let i=9;i<=22;i++)document.write(`<option value="${i}">${i}:00</option>`)</script>
+                                    <script>for(let i=9;i<=17;i++)document.write(`<option value="${i}">${i}:00</option>`)</script>
                                 </select>
                             </div>
                         </div>
@@ -504,10 +514,9 @@
         const CL_ADDR_2 = "94800 Simunjan, Sarawak, Malaysia.";
         const CL_META = "No. Tel: 082-805377 | Emel: mdssimu@sarawak.gov.my";
 
-        // ASAS KEPALA SURAT LANDSCAPE BARU (TIDAK OVERLAY / WIDE GRID)
         function injectPDFHeader(doc, titleText, subtitleText) {
             const logoImg = document.getElementById('pdf-logo-buffer');
-            const pageWidth = doc.internal.pageSize.width; // 210mm untuk A5 melintang, 297mm untuk A4 melintang
+            const pageWidth = doc.internal.pageSize.width;
 
             try {
                 doc.addImage(logoImg, 'PNG', 14, 10, 16, 16);
@@ -515,7 +524,6 @@
                 doc.setFont('Helvetica', 'bold'); doc.setFontSize(8); doc.text("[LOGO]", 14, 18);
             }
 
-            // Menetapkan paksi-X teks pada koordinat 35 bagi mengelakkan pertindihan imej logo
             doc.setTextColor(15, 23, 42);
             doc.setFont('Helvetica', 'bold');
             doc.setFontSize(11);
@@ -527,7 +535,6 @@
             doc.text(`${CL_ADDR_1} ${CL_ADDR_2}`, 35, 19);
             doc.text(CL_META, 35, 23);
 
-            // Blok Teks Tajuk Dokumen Sebelah Kanan (Right Aligned)
             doc.setFont('Helvetica', 'bold');
             doc.setFontSize(13);
             doc.setTextColor(14, 165, 233);
@@ -538,7 +545,6 @@
             doc.setTextColor(148, 163, 184);
             doc.text(subtitleText, pageWidth - 14, 21, { align: 'right' });
 
-            // Garis Pemisah Sempadan Lebar Lanskap
             doc.setDrawColor(226, 232, 240);
             doc.setLineWidth(0.4);
             doc.line(14, 28, pageWidth - 14, 28);
@@ -629,8 +635,11 @@
         }
 
         function clearArenaSearch() {
-            if(document.getElementById('search-arena-name')) document.getElementById('search-arena-name').value = '';
-            if(document.getElementById('search-arena-date')) document.getElementById('search-arena-date').value = '';
+            if(document.getElementById('search-arena-date')) {
+                const now = new Date();
+                document.getElementById('search-arena-date').value = now.toLocaleDateString('en-CA');
+            }
+            refresh();
         }
 
         setInterval(() => {
@@ -665,7 +674,6 @@
             }
         }
 
-        // 1. MANUALLY GENERATED RECEIPT (LANDSCAPE FORMAT - A5 MENEGAK DIUBAH KE LANDSCAPE)
         function handleManualReceipt(e) {
             e.preventDefault();
             
@@ -678,10 +686,10 @@
             const particular = document.getElementById('rcpt-particular').value.toUpperCase();
 
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a5' }); // Ditukarkan ke 'l' (Landscape)
+            const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a5' });
 
             doc.setFillColor(14, 165, 233); 
-            doc.rect(0, 0, 210, 6, 'F'); // Lebar diubah suai ke dimensi landskap A5 (210mm)
+            doc.rect(0, 0, 210, 6, 'F');
 
             injectPDFHeader(doc, "RESIT RASMI", `Kategori: ${rcptType}`);
 
@@ -694,7 +702,6 @@
             doc.text(`Tarikh       :  ${formattedDate}`, 14, 40);
             doc.text(`Urusan     :  Bayaran Manual`, 14, 45);
 
-            // Bekas Kad Pembayar Lebar Lanskap
             doc.setFillColor(248, 250, 252);
             doc.rect(14, 50, 182, 14, 'F');
             doc.setDrawColor(241, 245, 249);
@@ -912,6 +919,21 @@
             const duration = timeEnd - timeStart;
             const totalPrice = duration * 30;
 
+            const selectedDate = document.getElementById('a-date').value;
+
+            // Check overlap
+            const hasOverlap = db.approvedA.some(booking => {
+                if (booking.date !== selectedDate) return false;
+                const bStart = parseInt(booking.time);
+                const bEnd = booking.timeEnd ? parseInt(booking.timeEnd) : bStart + 1;
+                return (timeStart < bEnd && timeEnd > bStart);
+            });
+
+            if (hasOverlap) {
+                alert("Ralat: Slot masa yang dipilih telah bertindih dengan tempahan lain yang sudah diluluskan!");
+                return;
+            }
+
             alert(`Sila ambil maklum:\nPermohonan tempahan anda selama [ ${duration} Jam ] bernilai RM ${totalPrice} akan dihantar kepada Admin untuk proses semakan dan kelulusan rasmi.`);
 
             const billNo = document.getElementById('a-bill').value || "INV-GEN";
@@ -920,7 +942,7 @@
                 phone: document.getElementById('a-phone').value,
                 bill: billNo,
                 address: document.getElementById('a-address').value.toUpperCase(),
-                date: document.getElementById('a-date').value, 
+                date: selectedDate, 
                 time: timeStart,
                 timeEnd: timeEnd,
                 duration: duration,
@@ -975,6 +997,19 @@
             const msg = `TINDAKAN KELULUSAN ARENA\n\nNo Bil: ${a.bill}\nNama: ${a.name}\nTarikh/Masa: ${a.date} (${a.time}:00 - ${a.timeEnd}:00)\nDurasi: ${a.duration} Jam | Total: RM ${a.price}\n\nAdakah anda pasti mahu [${action.toUpperCase()}] permohonan ini?`;
             if(confirm(msg)) {
                 if(action === 'approve') {
+                    // double check overlap upon approval
+                    const hasOverlap = db.approvedA.some(booking => {
+                        if (booking.date !== a.date) return false;
+                        const bStart = parseInt(booking.time);
+                        const bEnd = booking.timeEnd ? parseInt(booking.timeEnd) : bStart + 1;
+                        return (a.time < bEnd && a.timeEnd > bStart);
+                    });
+
+                    if (hasOverlap) {
+                        alert("Kelulusan Gagal: Terdapat permohonan lain bagi slot ini yang telah diluluskan terlebih dahulu!");
+                        return;
+                    }
+
                     if(!db.revenue[curYear]) db.revenue[curYear] = {h:0, i:0, r:0, reg:0, arena:0};
                     db.revenue[curYear].arena += a.price; 
                     db.approvedA.push(a); 
@@ -987,7 +1022,6 @@
             }
         }
 
-        // 2. ARENA RECEIPT (LANDSCAPE FORMAT - A5)
         function muatTurunResitArena(billNo) {
             const booking = db.approvedA.find(a => a.bill === billNo);
             if (!booking) {
@@ -996,7 +1030,7 @@
             }
 
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a5' }); // Lanskap
+            const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a5' });
 
             doc.setFillColor(59, 130, 246);
             doc.rect(0, 0, 210, 6, 'F');
@@ -1074,7 +1108,6 @@
             doc.save(`Resit_SriNancy_${booking.bill}.pdf`);
         }
 
-        // 3. AUDIT LOG (LANDSCAPE FORMAT - A4)
         function muatTurunAuditLogPDF() {
             const filterYear = parseInt(document.getElementById('audit-filter-year').value);
             const filterDate = document.getElementById('audit-filter-date').value;
@@ -1092,10 +1125,10 @@
             }
 
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' }); // Lanskap A4
+            const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
 
             doc.setFillColor(220, 38, 38); 
-            doc.rect(0, 0, 297, 8, 'F'); // Kelebaran melintang 297mm
+            doc.rect(0, 0, 297, 8, 'F');
 
             injectPDFHeader(doc, "LOG AUDIT SISTEM", `Sesi Audit Tahun: ${filterYear}`);
 
@@ -1119,7 +1152,6 @@
             doc.save(`AuditLog_SDCE_${filterYear}.pdf`);
         }
 
-        // 4. MEMBERS REPORT (LANDSCAPE FORMAT - A4)
         function pdfAhli() {
             const rYear = parseInt(document.getElementById('report-year').value);
             const rDate = document.getElementById('report-date').value;
@@ -1133,7 +1165,7 @@
             if(listM.length === 0) return alert("Tiada rekod data ahli ditemui bagi padanan saringan ini.");
 
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' }); // Lanskap A4
+            const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
 
             injectPDFHeader(doc, "SENARAI NAMA AHLI RASMI BERDAFTAR", `Tahun Daftar: ${rYear}`);
 
@@ -1152,7 +1184,6 @@
             doc.save(`Laporan_Ahli_SDCE_${rYear}.pdf`);
         }
 
-        // 5. FINANCE REPORT (LANDSCAPE FORMAT - A4)
         function pdfKutipan() {
             const rYear = parseInt(document.getElementById('report-year').value);
             const rDate = document.getElementById('report-date').value;
@@ -1183,7 +1214,7 @@
             filterA.forEach(a => { totalArena += (a.price || 30); });
 
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' }); // Lanskap A4
+            const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
 
             injectPDFHeader(doc, "LAPORAN ANALITIK KUTIPAN DANA & YURAN KELAB", `Tahun Kewangan: ${rYear}`);
 
@@ -1201,18 +1232,17 @@
                 head: [["Bil", "Kategori Aliran Pendapatan", "Jumlah Kiraan Data", "Amaun Kutipan Bersih"]],
                 body: bodyKewangan,
                 theme: 'grid',
-                headStyles: { fillColor: [16, 185, 129] }
+                headStyles: { fillColor: [30, 41, 59] }
             });
             doc.save(`Laporan_Kewangan_SDCE_${rYear}.pdf`);
         }
 
-        // 6. MANAGEMENT COMMITTEE REPORT (LANDSCAPE FORMAT - A4)
         function pdfAJK() {
             const rYear = parseInt(document.getElementById('report-year').value);
             const currentAJK = db.ajk[rYear] || {};
 
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' }); // Lanskap A4
+            const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
 
             injectPDFHeader(doc, "SENARAI NAMA BARISAN KEPIMPINAN AJK KELAB", `Sesi Khidmat: ${rYear}`);
 
@@ -1434,65 +1464,54 @@
                 </div>
             `).join('');
 
-            const now = new Date();
-            const curHour = now.getHours();
-            const todayStr = now.toLocaleDateString('en-CA');
+            // TIMETABLE GENERATION (8 AM to 5 PM)
+            const targetDateInput = document.getElementById('search-arena-date');
+            const targetDate = targetDateInput ? targetDateInput.value : new Date().toLocaleDateString('en-CA');
             
-            const searchName = document.getElementById('search-arena-name') ? document.getElementById('search-arena-name').value.toUpperCase() : "";
-            const searchDate = document.getElementById('search-arena-date') ? document.getElementById('search-arena-date').value : "";
+            let timetableHtml = "";
+            for (let hour = 8; hour < 17; hour++) {
+                const slotStart = hour;
+                const slotEnd = hour + 1;
+                const slotString = `${String(slotStart).padStart(2, '0')}:00 - ${String(slotEnd).padStart(2, '0')}:00`;
+                
+                // Find matching approved booking for this particular slot and date
+                const matchedBooking = db.approvedA.find(a => {
+                    if (a.date !== targetDate) return false;
+                    const bStart = parseInt(a.time);
+                    const bEnd = a.timeEnd ? parseInt(a.timeEnd) : bStart + 1;
+                    return (slotStart >= bStart && slotStart < bEnd);
+                });
 
-            let filteredArena = db.approvedA;
-
-            if (currentRole === 'guest') {
-                filteredArena = filteredArena.filter(a => a.date === todayStr);
-            } else {
-                if (searchName || searchDate) {
-                    if (searchName) {
-                        filteredArena = filteredArena.filter(a => a.name.includes(searchName) || a.bill.toUpperCase().includes(searchName));
-                    }
-                    if (searchDate) {
-                        filteredArena = filteredArena.filter(a => a.date === searchDate);
-                    }
+                if (matchedBooking) {
+                    timetableHtml += `
+                    <tr class="hover:bg-white/5 bg-red-950/10">
+                        <td class="p-4 font-mono font-bold text-orange-400">${slotString}</td>
+                        <td class="p-4">
+                            <span class="bg-red-500/20 text-red-400 border border-red-500/30 px-2.5 py-1 rounded text-[9px] font-black uppercase tracking-wider">DITEMPAH</span>
+                        </td>
+                        <td class="p-4">
+                            <div class="text-white font-bold uppercase text-xs">${matchedBooking.name}</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5 font-mono">Bil: <span class="text-blue-400">${matchedBooking.bill}</span> | Tel: ${matchedBooking.phone}</div>
+                        </td>
+                        <td class="p-4 text-center">
+                            <button onclick="muatTurunResitArena('${matchedBooking.bill}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[9px] px-2.5 py-1 rounded transition-all inline-flex items-center gap-1.5"><i class="fas fa-file-invoice-dollar"></i> RESIT</button>
+                        </td>
+                    </tr>`;
                 } else {
-                    filteredArena = filteredArena.filter(a => a.date === todayStr);
+                    timetableHtml += `
+                    <tr class="hover:bg-white/5 bg-emerald-950/5">
+                        <td class="p-4 font-mono font-bold text-slate-400">${slotString}</td>
+                        <td class="p-4">
+                            <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded text-[9px] font-black uppercase tracking-wider pulse-green">AVAILABLE</span>
+                        </td>
+                        <td class="p-4 text-slate-500 italic text-[11px]">Slot sedia untuk ditempah di menu Arena</td>
+                        <td class="p-4 text-center">
+                            <button onclick="showSection('arena'); document.getElementById('a-date').value='${targetDate}'; document.getElementById('a-time').value='${slotStart}'; generateBillNo();" class="bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600 hover:text-white font-bold text-[9px] px-2.5 py-1 rounded transition-all inline-flex items-center gap-1 role-user-only role-guest-accessible"><i class="fas fa-plus"></i> BOOK</button>
+                        </td>
+                    </tr>`;
                 }
             }
-            
-            // KEMAS KINI PAPARAN: Butang Resit kini dibuka untuk peranan Guest juga (Kelas 'hidden' dibuang)
-            document.getElementById('sri-nancy-list').innerHTML = filteredArena.map(a => {
-                const startHr = parseInt(a.time);
-                const endHr = a.timeEnd ? parseInt(a.timeEnd) : startHr + 1;
-                let st = "", badgeStyle = "";
-                
-                if (a.date !== todayStr) {
-                    st = "Selesai Arkib";
-                    badgeStyle = "bg-slate-700/40 text-slate-400 border border-slate-600";
-                } else {
-                    if (curHour >= startHr && curHour < endHr) { st = "Sedang Digunakan"; badgeStyle = "bg-emerald-500/20 text-emerald-400 border border-emerald-500 pulse-green"; }
-                    else if (curHour < startHr) { st = "Sedang Menunggu Giliran"; badgeStyle = "bg-orange-500/20 text-orange-400 border border-orange-500"; }
-                    else { st = "Masa Sudah Tamat"; badgeStyle = "bg-red-500/20 text-red-500 border border-red-600/40 opacity-60"; }
-                }
-
-                return `<div class="glass-card p-5 border-l-4 ${a.date !== todayStr ? 'border-slate-600' : (curHour >= startHr && curHour < endHr ? 'border-emerald-500' : (curHour < startHr ? 'border-orange-500' : 'border-red-600'))}">
-                    <div class="flex justify-between items-start flex-wrap gap-2">
-                        <div class="space-y-1">
-                            <p class="text-white font-bold text-sm uppercase tracking-wide">${a.name}</p>
-                            <div class="grid grid-cols-2 gap-x-6 gap-y-1 text-[11px] text-slate-400 font-medium">
-                                <p><span class="text-slate-500 font-bold">No. Telefon:</span> ${a.phone}</p>
-                                <p><span class="text-slate-500 font-bold">No. Bil:</span> <span class="font-mono text-blue-400">${a.bill}</span></p>
-                                <p class="col-span-2"><span class="text-slate-500 font-bold">Alamat:</span> ${a.address || 'TIADA ALAMAT'}</p>
-                            </div>
-                            <p class="text-[11px] text-slate-300 flex items-center gap-2 pt-1 font-semibold">
-                                <i class="fas fa-calendar-day text-blue-500"></i> Tarikh: ${a.date} | <i class="fas fa-clock text-orange-500"></i> Slot Masa: ${startHr}:00 - ${endHr}:00 (${a.duration || 1} Jam)
-                            </p>
-                        </div>
-                        <div class="flex flex-col items-end gap-2">
-                            <div class="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider ${badgeStyle}">${st}</div>
-                            <button onclick="muatTurunResitArena('${a.bill}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[9px] px-2.5 py-1 rounded transition-all flex items-center gap-1.5"><i class="fas fa-file-invoice-dollar"></i> RESIT</button>
-                        </div>
-                    </div>
-                </div>`;
-            }).join('') || '<div class="text-center py-10 text-slate-700 italic text-xs">Tiada sebarang rekod tempahan (booking) ditemui untuk padanan carian ini.</div>';
+            document.getElementById('sri-nancy-timetable').innerHTML = timetableHtml;
 
             renderApproval();
             
